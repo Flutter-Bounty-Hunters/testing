@@ -1,0 +1,4 @@
+name: flutter_testing
+
+packages:
+  - packages/*
