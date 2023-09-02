@@ -1,3 +1,6 @@
+## 0.0.4
+Removed web runners.
+
 ## 0.0.3
 Removed text input runners.
 
