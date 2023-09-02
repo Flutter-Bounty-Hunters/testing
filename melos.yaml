@@ -1,4 +1,7 @@
 name: flutter_testing
 
+repository: https://github.com/Flutter-Bounty-Hunters/testing
+
 packages:
   - packages/*
+
