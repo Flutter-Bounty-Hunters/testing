@@ -1,3 +1,6 @@
+## 0.0.3
+Removed text input runners.
+
 ## 0.0.2
 Updated package metadata.
 

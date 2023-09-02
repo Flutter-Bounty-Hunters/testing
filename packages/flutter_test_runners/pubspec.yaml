@@ -1,6 +1,6 @@
 name: flutter_test_runners
 description: "Widget test runners for Flutter apps and packages."
-version: 0.0.2
+version: 0.0.3
 repository: https://github.com/Flutter-Bounty-Hunters/testing/tree/main/packages/flutter_test_runners
 
 environment:
