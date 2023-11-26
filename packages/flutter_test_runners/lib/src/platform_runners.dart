@@ -11,9 +11,9 @@ void testWidgetsOnDesktop(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgetsOnMac("$description (on MAC)", test, skip: skip, variant: variant);
-  testWidgetsOnWindows("$description (on Windows)", test, skip: skip, variant: variant);
-  testWidgetsOnLinux("$description (on Linux)", test, skip: skip, variant: variant);
+  testWidgetsOnMac(description, test, skip: skip, variant: variant);
+  testWidgetsOnWindows(description, test, skip: skip, variant: variant);
+  testWidgetsOnLinux(description, test, skip: skip, variant: variant);
 }
 
 /// A widget test that runs a variant for every mobile platform, e.g.,
@@ -25,8 +25,8 @@ void testWidgetsOnMobile(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgetsOnAndroid("$description (on Android)", test, variant: variant, skip: skip);
-  testWidgetsOnIos("$description (on iOS)", test, variant: variant, skip: skip);
+  testWidgetsOnAndroid(description, test, variant: variant, skip: skip);
+  testWidgetsOnIos(description, test, variant: variant, skip: skip);
 }
 
 /// A widget test that runs a variant for every platform, e.g.,
@@ -38,11 +38,11 @@ void testWidgetsOnAllPlatforms(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgetsOnMac("$description (on MAC)", test, skip: skip, variant: variant);
-  testWidgetsOnWindows("$description (on Windows)", test, skip: skip, variant: variant);
-  testWidgetsOnLinux("$description (on Linux)", test, skip: skip, variant: variant);
-  testWidgetsOnAndroid("$description (on Android)", test, skip: skip, variant: variant);
-  testWidgetsOnIos("$description (on iOS)", test, skip: skip, variant: variant);
+  testWidgetsOnMac(description, test, skip: skip, variant: variant);
+  testWidgetsOnWindows(description, test, skip: skip, variant: variant);
+  testWidgetsOnLinux(description, test, skip: skip, variant: variant);
+  testWidgetsOnAndroid(description, test, skip: skip, variant: variant);
+  testWidgetsOnIos(description, test, skip: skip, variant: variant);
 }
 
 /// A widget test that runs a variant for Windows and Linux.
@@ -58,8 +58,8 @@ void testWidgetsOnWindowsAndLinux(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgetsOnWindows("$description (on Windows)", test, skip: skip, variant: variant);
-  testWidgetsOnLinux("$description (on Linux)", test, skip: skip, variant: variant);
+  testWidgetsOnWindows(description, test, skip: skip, variant: variant);
+  testWidgetsOnLinux(description, test, skip: skip, variant: variant);
 }
 
 /// A widget test that configures itself for an arbitrary desktop environment.
@@ -85,7 +85,7 @@ void testWidgetsOnMac(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets(description, (tester) async {
+  testWidgets("$description (on MAC)", (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
 
     tester.view
@@ -114,7 +114,7 @@ void testOnMac(
   VoidCallback realTest, {
   bool skip = false,
 }) {
-  test(description, () {
+  test("$description (on MAC)", () {
     debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
     try {
       realTest();
@@ -133,7 +133,7 @@ void testWidgetsOnWindows(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets(description, (tester) async {
+  testWidgets("$description (on Windows)", (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.windows;
 
     tester.view
@@ -162,7 +162,7 @@ void testOnWindows(
   VoidCallback realTest, {
   bool skip = false,
 }) {
-  test(description, () {
+  test("$description (on Windows)", () {
     debugDefaultTargetPlatformOverride = TargetPlatform.windows;
     try {
       realTest();
@@ -181,7 +181,7 @@ void testWidgetsOnLinux(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets(description, (tester) async {
+  testWidgets("$description (on Linux)", (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.linux;
 
     tester.view
@@ -210,7 +210,7 @@ void testOnLinux(
   VoidCallback realTest, {
   bool skip = false,
 }) {
-  test(description, () {
+  test("$description (on Linux)", () {
     debugDefaultTargetPlatformOverride = TargetPlatform.linux;
     try {
       realTest();
@@ -229,7 +229,7 @@ void testWidgetsOnAndroid(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets(description, (tester) async {
+  testWidgets("$description (on Android)", (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
     try {
       await test(tester);
@@ -248,7 +248,7 @@ void testWidgetsOnIos(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets(description, (tester) async {
+  testWidgets("$description (on iOS)", (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
     try {
       await test(tester);
