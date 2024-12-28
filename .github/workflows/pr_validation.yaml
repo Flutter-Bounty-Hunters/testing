@@ -27,6 +27,8 @@ jobs:
           arch: x86_64
           profile: Pixel_8_API_34
           emulator-options: "-no-snapshot -no-boot-anim -camera-back none -camera-front none"  # Emulator options (optional)
+          script: |
+            echo "Emulator is running"
 
       - name: Wait for Emulator to Start
         run: |
