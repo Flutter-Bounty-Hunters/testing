@@ -22,10 +22,10 @@ jobs:
       - name: Install Android SDK and launch emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 34
+          api-level: 35
           target: default
           arch: x86_64
-          profile: Pixel_8_API_34
+          profile: pixel_9_pro
           emulator-options: "-no-snapshot -no-boot-anim -camera-back none -camera-front none"  # Emulator options (optional)
           script: |
             echo "Emulator is running"
