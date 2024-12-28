@@ -17,6 +17,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: stable
+          architecture: x64
 
       - name: Install Android SDK and launch emulator
         uses: reactivecircus/android-emulator-runner@v2
