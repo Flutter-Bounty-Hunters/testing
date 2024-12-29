@@ -189,5 +189,5 @@ jobs:
       - name: Run Flutter app and tests
         run: |
           flutter run & \
-          sleep 60 && \
+          sleep 180 && \
           flutter test test_driver/deep_link_ios_test.dart
