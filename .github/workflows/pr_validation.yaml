@@ -128,12 +128,12 @@ jobs:
           
           # List all provisioning profiles to make sure we placed it correctly
           echo "Listing all provisioning profiles in the CI server"
-          ls ~/Library/MobileDevice/Provisioning\ Profiles/$PP_FILE_NAME
+          ls ~/Library/MobileDevice/Provisioning\ Profiles/
           echo ""
           
           # Check provisioning profile data
           echo "Provisioning profile data:"
-          security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/
+          security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/$PP_FILE_NAME
           echo ""
           
           # Save ExportOptions.plist from Base64 to file
