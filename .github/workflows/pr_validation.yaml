@@ -45,40 +45,21 @@ jobs:
           script: |
             echo "Running emulator..."
             echo "Working directory: $(pwd)"
-            echo ""
-            
-            echo "Changing working directory to the example app"
-            ls -la
-            echo ""
-            cd packages
-            ls -la
-            echo ""
-            
-            cd flutter_test_runners
-            ls -la
-            echo ""
-            
-            cd example_deep_links
-            ls -la
-            echo ""
-            
-            echo "Final working directory: $(pwd)"
-            echo ""
             
             echo "Unlocking the screen"
             adb shell input keyevent 82  # Unlock the emulator screen if it's locked
             echo ""
             
             echo "Getting Flutter dependencies"
-            flutter pub get
+            cd packages/flutter_test_runners/example_deep_links && flutter pub get
             echo ""
             
             echo "Building and installing the APK"
-            flutter run --debug -d emulator-5554 
+            cd packages/flutter_test_runners/example_deep_links && flutter run --debug -d emulator-5554 
             echo ""
             
             echo "Running Flutter tests"
-            flutter test test_driver
+            cd packages/flutter_test_runners/example_deep_links && flutter test test_driver
 
 #      - name: Wait for Emulator to Start
 #        working-directory: ~
