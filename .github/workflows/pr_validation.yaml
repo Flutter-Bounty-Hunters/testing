@@ -91,10 +91,10 @@ jobs:
       - name: Install Certificate and Provisioning Profile
         working-directory: ~
         env:
-          CERTIFICATE_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
+          SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
         run: |
           # Install the signing certificate
-          security import certificate.p12 -k ~/Library/Keychains/login.keychain-db -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security import certificate.p12 -k ~/Library/Keychains/login.keychain-db -P "$SIGNING_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
           
           # Move the provisioning profile to the correct location
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
