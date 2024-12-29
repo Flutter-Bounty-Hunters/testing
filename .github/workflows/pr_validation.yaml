@@ -48,7 +48,7 @@ jobs:
             echo ""
             
             echo "Changing working directory to the example app"
-            echo "Current directory listing: $(ls -la)"
+            ls -la
             cd ./flutter_test_runners/example_deep_links
             echo "Working directory: $(pwd)"
             echo ""
