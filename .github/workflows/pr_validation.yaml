@@ -49,8 +49,20 @@ jobs:
             
             echo "Changing working directory to the example app"
             ls -la
-            cd ./packages/flutter_test_runners/example_deep_links
-            echo "Working directory: $(pwd)"
+            echo ""
+            cd packages
+            ls -la
+            echo ""
+            
+            cd flutter_test_runners
+            ls -la
+            echo ""
+            
+            cd example_deep_links
+            ls -la
+            echo ""
+            
+            echo "Final working directory: $(pwd)"
             echo ""
             
             echo "Unlocking the screen"
@@ -62,7 +74,7 @@ jobs:
             echo ""
             
             echo "Building and installing the APK"
-            flutter run --debug -d emulator-5554 --target=packages/flutter_test_runners/example_deep_links/lib/main.dart
+            flutter run --debug -d emulator-5554 
             echo ""
             
             echo "Running Flutter tests"
