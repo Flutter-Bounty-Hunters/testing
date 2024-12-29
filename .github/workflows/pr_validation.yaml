@@ -187,7 +187,7 @@ jobs:
           xcrun simctl list devices booted
 
       - name: Install the app
-        run: flutter install --debug
+        run: flutter install --debug --verbose
 
       - name: Run the iOS deep link tests
         run: flutter test test_driver/deep_link_ios_test.dart
