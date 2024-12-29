@@ -167,11 +167,11 @@ jobs:
       - name: Install Flutter Dependencies
         run: flutter pub get
 
-      - name: Build iOS App
-        run: flutter build ipa --debug --verbose --export-options-plist=$EXPORT_OPTS_PATH
-
-      - name: Install iOS App
-        run: flutter install ipa
+#      - name: Build iOS App
+#        run: flutter build ipa --debug --verbose --export-options-plist=$EXPORT_OPTS_PATH
+#
+#      - name: Install iOS App
+#        run: flutter install ipa
 
       - name: Create and Boot iOS Simulator
         run: |
@@ -186,3 +186,8 @@ jobs:
           xcrun simctl boot "$SIMULATOR_ID"
           xcrun simctl list devices booted
 
+      - name: Run Flutter app and tests
+        run: |
+          flutter run & \
+          sleep 60 && \
+          flutter test test_driver/deep_link_ios_test.dart
