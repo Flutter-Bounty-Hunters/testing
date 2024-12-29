@@ -79,6 +79,28 @@ jobs:
         working-directory: ./packages/flutter_test_runners/example_deep_links
 
     steps:
+      - name: Decode Provisioning Profile and Certificate
+        env:
+          PROVISIONING_PROFILE: ${{ secrets.PROVISIONING_PROFILE }}
+          SIGNING_CERTIFICATE: ${{ secrets.SIGNING_CERTIFICATE }}
+        run: |
+          echo "$PROVISIONING_PROFILE" | base64 --decode > provisioning.mobileprovision
+          echo "$SIGNING_CERTIFICATE" | base64 --decode > certificate.p12
+
+      - name: Install Certificate and Provisioning Profile
+        env:
+          CERTIFICATE_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
+        run: |
+          # Install the signing certificate
+          security import certificate.p12 -k ~/Library/Keychains/login.keychain-db -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          
+          # Move the provisioning profile to the correct location
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          mv provisioning.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+      
+          # Verify the certificate
+          security find-identity -p codesigning -v
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
