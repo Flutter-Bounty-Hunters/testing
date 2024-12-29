@@ -186,8 +186,8 @@ jobs:
           xcrun simctl boot "$SIMULATOR_ID"
           xcrun simctl list devices booted
 
-      - name: Run Flutter app and tests
-        run: |
-          flutter run & \
-          sleep 180 && \
-          flutter test test_driver/deep_link_ios_test.dart
+      - name: Install the app
+        run: flutter install --debug
+
+      - name: Run the iOS deep link tests
+        run: flutter test test_driver/deep_link_ios_test.dart
