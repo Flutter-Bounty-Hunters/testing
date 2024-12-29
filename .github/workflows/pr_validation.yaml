@@ -34,6 +34,13 @@ jobs:
           channel: stable
           architecture: x64
 
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      - name: Build Flutter App (Debug Mode)
+        # Must be debug mode so we can enable Flutter Driver.
+        run: flutter build apk --debug
+
       - name: Install Android SDK and launch emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -57,12 +64,8 @@ jobs:
             adb shell input keyevent 82  # Unlock the emulator screen if it's locked
             echo ""
             
-            echo "Getting Flutter dependencies"
-            cd packages/flutter_test_runners/example_deep_links && flutter pub get
-            echo ""
-            
-            echo "Building and installing the APK"
-            cd packages/flutter_test_runners/example_deep_links && flutter build apk --debug && flutter install --debug -d emulator-5554 
+            echo "Installing the APK"
+            cd packages/flutter_test_runners/example_deep_links && flutter install --debug -d emulator-5554 
             echo ""
             
             echo "Running Flutter tests"
@@ -74,12 +77,6 @@ jobs:
 #          adb wait-for-device
 #          adb shell input keyevent 82  # Unlock the emulator screen if it's locked
 #
-#      - name: Install Flutter Dependencies
-#        run: flutter pub get
-#
-#      - name: Build Flutter App (Debug Mode)
-#        # Must be debug mode so we can enable Flutter Driver.
-#        run: flutter build apk --debug
 #
 #      - name: Install App on Emulator
 #        run: flutter install --debug

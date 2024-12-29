@@ -80,6 +80,10 @@ void testDeepLinkAndroidAppLaunch(
 
     // Wait for a moment so that the app has time to start the Dart VM
     // service and report it in the ADB logs.
+    //
+    // When running locally, waiting 1 second is probably sufficient. But
+    // when running in GitHub CI, we need to wait longer to make sure the
+    // Dart VM service reports its URL.
     _log.info("Waiting a moment so that app can launch the Dart VM service.");
     await Future.delayed(const Duration(seconds: 5));
 
