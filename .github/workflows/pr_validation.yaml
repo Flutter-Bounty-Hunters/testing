@@ -80,6 +80,7 @@ jobs:
 
     steps:
       - name: Set location for ExportOptions.plist
+        working-directory: ~
         run: |
           echo "EXPORT_OPTS_PATH=$RUNNER_TEMP/ExportOptions.plist" >> $GITHUB_ENV
 
