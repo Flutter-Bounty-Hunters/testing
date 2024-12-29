@@ -21,6 +21,12 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          architecture: x64
+
       - name: Install Android SDK and launch emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -37,28 +43,34 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
           script: |
-            echo "Emulator is running"
+            echo "Unlocking the screen"
+            adb shell input keyevent 82  # Unlock the emulator screen if it's locked
+            
+            echo "Getting Flutter dependencies"
+            flutter pub get
+            
+            echo "Building and installing the APK"
+            flutter build apk --debug
+            flutter install --debug
+            
+            echo "Running Flutter tests"
+            flutter test test_driver
 
-      - name: Wait for Emulator to Start
-        run: |
-          adb wait-for-device
-          adb shell input keyevent 82  # Unlock the emulator screen if it's locked
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          architecture: x64
-
-      - name: Install Flutter Dependencies
-        run: flutter pub get
-
-      - name: Build Flutter App (Debug Mode)
-        # Must be debug mode so we can enable Flutter Driver.
-        run: flutter build apk --debug
-
-      - name: Install App on Emulator
-        run: flutter install --debug
-
-      - name: Run deep link tests
-        run: flutter test test_driver
+#      - name: Wait for Emulator to Start
+#        working-directory: ~
+#        run: |
+#          adb wait-for-device
+#          adb shell input keyevent 82  # Unlock the emulator screen if it's locked
+#
+#      - name: Install Flutter Dependencies
+#        run: flutter pub get
+#
+#      - name: Build Flutter App (Debug Mode)
+#        # Must be debug mode so we can enable Flutter Driver.
+#        run: flutter build apk --debug
+#
+#      - name: Install App on Emulator
+#        run: flutter install --debug
+#
+#      - name: Run deep link tests
+#        run: flutter test test_driver
