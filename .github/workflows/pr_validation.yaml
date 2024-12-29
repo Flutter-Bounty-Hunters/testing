@@ -80,6 +80,7 @@ jobs:
 
     steps:
       - name: Decode Provisioning Profile and Certificate
+        working-directory: ~
         env:
           PROVISIONING_PROFILE: ${{ secrets.PROVISIONING_PROFILE }}
           SIGNING_CERTIFICATE: ${{ secrets.SIGNING_CERTIFICATE }}
@@ -88,6 +89,7 @@ jobs:
           echo "$SIGNING_CERTIFICATE" | base64 --decode > certificate.p12
 
       - name: Install Certificate and Provisioning Profile
+        working-directory: ~
         env:
           CERTIFICATE_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
         run: |
