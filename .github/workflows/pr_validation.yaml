@@ -168,7 +168,7 @@ jobs:
         run: flutter pub get
 
       - name: Build the app
-        run: flutter build ios --debug --verbose --no-code-sign
+        run: flutter build ios --debug --verbose --no-codesign
 
 #      - name: Build iOS App
 #        run: flutter build ipa --debug --verbose --export-options-plist=$EXPORT_OPTS_PATH
