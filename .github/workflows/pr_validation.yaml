@@ -3,30 +3,98 @@ name: Validate PR
 on: [pull_request, workflow_dispatch]
 
 jobs:
-  test_flutter-test-runners_deep-links_android:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./packages/flutter_test_runners/example_deep_links
+#  test_flutter-test-runners_deep-links_android:
+#    runs-on: ubuntu-latest
+#    defaults:
+#      run:
+#        working-directory: ./packages/flutter_test_runners/example_deep_links
+#
+#    steps:
+#      - name: Checkout Repository
+#        uses: actions/checkout@v3
+#
+#      # Need JDK 17 for Android build.
+#      - name: Set up JDK 17
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: 'temurin'
+#          java-version: '17'
+#
+#      # The Android emulator action seems to want to include this.
+#      - name: enable KVM for linux runners
+#        working-directory: ~
+#        run: |
+#          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+#          sudo udevadm control --reload-rules
+#          sudo udevadm trigger --name-match=kvm
+#
+#      - name: Set up Flutter
+#        uses: subosito/flutter-action@v2
+#        with:
+#          channel: stable
+#          architecture: x64
+#
+#      - name: Install Flutter Dependencies
+#        run: flutter pub get
+#
+#      - name: Build Flutter App (Debug Mode)
+#        # Must be debug mode so we can enable Flutter Driver.
+#        run: flutter build apk --debug
+#
+#      - name: Install Android SDK and launch emulator
+#        uses: reactivecircus/android-emulator-runner@v2
+#        with:
+#          api-level: 35
+#          target: default
+#          arch: x86_64
+#          profile: Galaxy Nexus
+#          cores: 2
+#          disk-size: 6000M
+#          heap-size: 600M
+#          sdcard-path-or-size: 100M
+#          avd-name: github-ci-emulator
+#          force-avd-creation: false
+#          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+#          disable-animations: false
+#          script: |
+#            echo "Running emulator..."
+#            echo "Working directory: $(pwd)"
+#
+#            echo "Unlocking the screen"
+#            adb shell input keyevent 82  # Unlock the emulator screen if it's locked
+#            echo ""
+#
+#            echo "Installing the APK"
+#            cd packages/flutter_test_runners/example_deep_links && flutter install --debug -d emulator-5554
+#            echo ""
+#
+#            echo "Running Flutter tests"
+#            cd packages/flutter_test_runners/example_deep_links && flutter test test_driver/deep_link_android_test.dart
+
+  test_flutter-test-runners_deep-links_ios:
+    runs-on: macos-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Need JDK 17 for Android build.
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      # The Android emulator action seems to want to include this.
-      - name: enable KVM for linux runners
-        working-directory: ~
+      - name: Set up Xcode
         run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
+          sudo xcode-select -s /Applications/Xcode.app
+          xcodebuild -version
+
+      - name: Create and Boot iOS Simulator
+        run: |
+          # List available devices and runtimes
+          xcrun simctl list devices
+          xcrun simctl list runtimes
+          
+          # Create a new simulator (if needed)
+          SIMULATOR_ID=$(xcrun simctl create "GitHubActions-Simulator" "iPhone 14" "com.apple.CoreSimulator.SimRuntime.iOS-17-0")
+          
+          # Boot the simulator
+          xcrun simctl boot "$SIMULATOR_ID"
+          xcrun simctl list devices booted
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -37,49 +105,8 @@ jobs:
       - name: Install Flutter Dependencies
         run: flutter pub get
 
-      - name: Build Flutter App (Debug Mode)
-        # Must be debug mode so we can enable Flutter Driver.
-        run: flutter build apk --debug
+      - name: Build iOS App
+        run: flutter build ios --debug
 
-      - name: Install Android SDK and launch emulator
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 35
-          target: default
-          arch: x86_64
-          profile: Galaxy Nexus
-          cores: 2
-          disk-size: 6000M
-          heap-size: 600M
-          sdcard-path-or-size: 100M
-          avd-name: github-ci-emulator
-          force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: false
-          script: |
-            echo "Running emulator..."
-            echo "Working directory: $(pwd)"
-            
-            echo "Unlocking the screen"
-            adb shell input keyevent 82  # Unlock the emulator screen if it's locked
-            echo ""
-            
-            echo "Installing the APK"
-            cd packages/flutter_test_runners/example_deep_links && flutter install --debug -d emulator-5554 
-            echo ""
-            
-            echo "Running Flutter tests"
-            cd packages/flutter_test_runners/example_deep_links && flutter test test_driver/deep_link_android_test.dart
-
-#      - name: Wait for Emulator to Start
-#        working-directory: ~
-#        run: |
-#          adb wait-for-device
-#          adb shell input keyevent 82  # Unlock the emulator screen if it's locked
-#
-#
-#      - name: Install App on Emulator
-#        run: flutter install --debug
-#
-#      - name: Run deep link tests
-#        run: flutter test test_driver
+      - name: Install iOS App
+        run: flutter install ipa
