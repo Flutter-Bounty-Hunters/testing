@@ -167,6 +167,9 @@ jobs:
       - name: Install Flutter Dependencies
         run: flutter pub get
 
+      - name: Build the app
+        run: flutter build ios --debug --verbose --no-code-sign
+
 #      - name: Build iOS App
 #        run: flutter build ipa --debug --verbose --export-options-plist=$EXPORT_OPTS_PATH
 #
@@ -185,9 +188,6 @@ jobs:
           # Boot the simulator
           xcrun simctl boot "$SIMULATOR_ID"
           xcrun simctl list devices booted
-
-      - name: Build the app
-        run: flutter build ios --debug --verbose
 
       - name: Install the app
         run: flutter install --debug --verbose
