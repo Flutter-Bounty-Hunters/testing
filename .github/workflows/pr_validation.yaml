@@ -62,7 +62,7 @@ jobs:
             echo ""
             
             echo "Building and installing the APK"
-            flutter run --debug --target=packages/flutter_test_runners/example_deep_links/lib/main.dart
+            flutter run --debug -d emulator-5554 --target=packages/flutter_test_runners/example_deep_links/lib/main.dart
             echo ""
             
             echo "Running Flutter tests"
