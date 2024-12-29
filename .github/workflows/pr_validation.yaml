@@ -77,8 +77,9 @@ jobs:
     defaults:
       run:
         working-directory: ./packages/flutter_test_runners/example_deep_links
-      env:
-        EXPORT_OPTS_PATH: $RUNNER_TEMP/ExportOptions.plist
+
+    env:
+      EXPORT_OPTS_PATH: $RUNNER_TEMP/ExportOptions.plist
 
     steps:
       - name: Install the Apple certificate and provisioning profile
