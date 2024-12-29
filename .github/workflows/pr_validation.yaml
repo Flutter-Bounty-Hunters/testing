@@ -90,11 +90,12 @@ jobs:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.SIGNING_CERTIFICATE }}
           P12_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE }}
+          PP_FILE_NAME: fbh_deep_link_example_app_profile.mobileprovision
           EXPORT_OPTIONS_PLIST: ${{ secrets.EXPORT_OPTIONS_PLIST }}
         run: |
           # Create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          PP_PATH=$RUNNER_TEMP/fbh_deep_link_example_app_profile.mobileprovision
+          PP_PATH=$RUNNER_TEMP/$PP_FILE_NAME
           KEYCHAIN_PATH=~/Library/Keychains/login.keychain-db
           
           # Check keychain status
@@ -127,7 +128,13 @@ jobs:
           
           # List all provisioning profiles to make sure we placed it correctly
           echo "Listing all provisioning profiles in the CI server"
-          ls ~/Library/MobileDevice/Provisioning\ Profiles/
+          ls ~/Library/MobileDevice/Provisioning\ Profiles/$PP_FILE_NAME
+          echo ""
+          
+          # Check provisioning profile data
+          echo "Provisioning profile data:"
+          security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/
+          echo ""
           
           # Save ExportOptions.plist from Base64 to file
           echo "Saving the base64 encoded ExportOptions.plist to $EXPORT_OPTS_PATH"
@@ -144,7 +151,7 @@ jobs:
       - name: Verify Xcode access to provisioning profile
         run: |
           echo "Listing all provisioning profiles visible to xcode:"
-          xcrun simctl list profiles
+          cd ios && xcodebuild -showBuildSettings
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
