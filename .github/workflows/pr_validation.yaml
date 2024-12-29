@@ -62,7 +62,7 @@ jobs:
             echo ""
             
             echo "Building and installing the APK"
-            cd packages/flutter_test_runners/example_deep_links && flutter run --debug -d emulator-5554 
+            cd packages/flutter_test_runners/example_deep_links && flutter install --debug -d emulator-5554 
             echo ""
             
             echo "Running Flutter tests"
