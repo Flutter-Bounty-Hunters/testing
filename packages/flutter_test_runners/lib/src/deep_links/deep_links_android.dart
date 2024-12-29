@@ -81,7 +81,7 @@ void testDeepLinkAndroidAppLaunch(
     // Wait for a moment so that the app has time to start the Dart VM
     // service and report it in the ADB logs.
     _log.info("Waiting a moment so that app can launch the Dart VM service.");
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 5));
 
     // Ensure that we found the Dart VM service URL.
     expect(
