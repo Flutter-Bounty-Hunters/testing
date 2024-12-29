@@ -44,7 +44,11 @@ jobs:
           disable-animations: false
           script: |
             echo "Running emulator..."
+            echo "Working directory: $(pwd)"
+            echo ""
             
+            echo "Changing working directory to the example app"
+            echo "Current directory listing: $(ls -la)"
             cd ./flutter_test_runners/example_deep_links
             echo "Working directory: $(pwd)"
             echo ""
