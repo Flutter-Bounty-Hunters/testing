@@ -44,6 +44,8 @@ jobs:
           disable-animations: false
           script: |
             echo "Running emulator..."
+            
+            cd ./flutter_test_runners/example_deep_links
             echo "Working directory: $(pwd)"
             echo ""
             
