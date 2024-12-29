@@ -13,12 +13,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-#      # The Android emulator action seems to want to include this.
-#      - name: enable KVM for linux runners
-#        run: |
-#          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-#          sudo udevadm control --reload-rules
-#          sudo udevadm trigger --name-match=kvm
+      # The Android emulator action seems to want to include this.
+      - name: enable KVM for linux runners
+        working-directory: ~
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
       - name: Install Android SDK and launch emulator
         uses: reactivecircus/android-emulator-runner@v2
@@ -28,6 +29,8 @@ jobs:
           arch: x86_64
           profile: Galaxy Nexus
           cores: 2
+          disk-size: 6000M
+          heap-size: 600M
           sdcard-path-or-size: 100M
           avd-name: github-ci-emulator
           force-avd-creation: false
