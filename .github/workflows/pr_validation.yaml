@@ -74,6 +74,10 @@ jobs:
   test_flutter-test-runners_deep-links_ios:
     runs-on: macos-latest
 
+    defaults:
+      run:
+        working-directory: ./packages/flutter_test_runners/example_deep_links
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
