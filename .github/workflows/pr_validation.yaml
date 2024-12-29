@@ -43,15 +43,22 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
           script: |
+            echo "Running emulator..."
+            echo "Working directory: $(pwd)"
+            echo ""
+            
             echo "Unlocking the screen"
             adb shell input keyevent 82  # Unlock the emulator screen if it's locked
+            echo ""
             
             echo "Getting Flutter dependencies"
             flutter pub get
+            echo ""
             
             echo "Building and installing the APK"
             flutter build apk --debug
-            flutter install --debug
+            flutter install
+            echo ""
             
             echo "Running Flutter tests"
             flutter test test_driver
