@@ -186,6 +186,9 @@ jobs:
           xcrun simctl boot "$SIMULATOR_ID"
           xcrun simctl list devices booted
 
+      - name: Build the app
+        run: flutter build ios --debug --verbose
+
       - name: Install the app
         run: flutter install --debug --verbose
 
