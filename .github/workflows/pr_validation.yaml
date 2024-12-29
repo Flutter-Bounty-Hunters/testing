@@ -80,6 +80,7 @@ jobs:
 
     steps:
       - name: Install the Apple certificate and provisioning profile
+        working-directory: ~
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.SIGNING_CERTIFICATE }}
           P12_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
