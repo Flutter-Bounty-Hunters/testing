@@ -127,10 +127,12 @@ class Xcrun {
     //   runInShell: true,
     // );
 
+    print("Sending xcrun simctl terminate command...");
     final result = await Process.run(
       "sh",
       ["-c", "xcrun simctl terminate booted $appBundleId"],
       runInShell: true,
+      includeParentEnvironment: false,
     );
 
     print("Killed app - exit code: ${result.exitCode}");
