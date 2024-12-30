@@ -130,19 +130,22 @@ class Xcrun {
     print("Sending xcrun simctl terminate command...");
     final process = await Process.start(
       "sh",
-      ["-c", "xcrun simctl terminate booted $appBundleId"],
+      ["-c", "xcrun", "simctl", "terminate", "booted", appBundleId],
     );
     print("terminate command process was started");
 
     process.stdin.close();
 
-    process.stdout.transform(utf8.decoder).listen((log) {
-      print("terminate command log: $log");
-    });
+    stdout.addStream(process.stdout);
+    stderr.addStream(process.stderr);
 
-    process.stderr.transform(utf8.decoder).listen((error) {
-      print("terminate command error: $error");
-    });
+    // process.stdout.transform(utf8.decoder).listen((log) {
+    //   print("terminate command log: $log");
+    // });
+    //
+    // process.stderr.transform(utf8.decoder).listen((error) {
+    //   print("terminate command error: $error");
+    // });
 
     print("Waiting for exit code...");
     final exitCode = await process.exitCode;
