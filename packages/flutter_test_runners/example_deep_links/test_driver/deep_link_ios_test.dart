@@ -15,8 +15,8 @@ void main() {
     test("xcrun sanity check", () async {
       print("Running xcrun Process sanity check.");
 
-      print("Env variables:");
-      print(Process.runSync('env', []).stdout);
+      // print("Env variables:");
+      // print(Process.runSync('env', []).stdout);
 
       print("Running the command...");
       final process = await Process.start(
@@ -25,11 +25,11 @@ void main() {
           "-c",
           "xcrun",
           "simctl",
-          "list",
-          "--verbose",
-          // "get_app_container",
-          // "booted",
-          // "com.flutterbountyhunters.deeplinks.example",
+          // "list",
+          // "--verbose",
+          "get_app_container",
+          "booted",
+          "com.flutterbountyhunters.deeplinks.example",
         ],
       );
       process.stdout.transform(utf8.decoder).listen((data) {
