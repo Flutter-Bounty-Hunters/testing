@@ -27,7 +27,9 @@ void main() {
           "booted",
           "com.flutterbountyhunters.deeplinks.example",
         ],
-        environment: {'DEVELOPER_DIR': '/Applications/Xcode.app/Contents/Developer'},
+        environment: {
+          'FLUTTER_TEST': 'false',
+        },
       );
       process.stdout.transform(utf8.decoder).listen((data) {
         print("STDOUT:\n$data");
@@ -36,6 +38,9 @@ void main() {
         print("STDERR:\n$data");
       });
       print("The process started...");
+      print("Closing stdin");
+      process.stdin.close();
+      print("Waiting for exist code...");
       final exitCode = await process.exitCode;
       print("The xcrun call returned with exit code: $exitCode");
     });
