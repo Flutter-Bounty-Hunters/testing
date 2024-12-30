@@ -242,4 +242,4 @@ jobs:
 #          xcrun simctl launch booted com.flutterbountyhunters.deeplinks.example
 
       - name: Run the iOS deep link tests
-        run: flutter test test_driver/deep_link_ios_test.dart
+        run: dart test test_driver/deep_link_ios_test.dart
