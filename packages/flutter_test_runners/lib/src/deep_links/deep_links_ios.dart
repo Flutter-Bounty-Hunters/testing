@@ -30,8 +30,8 @@ void testDeepLinkIosAppLaunch(
     _log.info("Running deep link test driver...");
 
     // Pre-emptively the kill the app, in case it's already running.
-    _log.info("Pre-emptively killing the app");
-    await Xcrun.killApp(appBundleId);
+    // _log.info("Pre-emptively killing the app");
+    // await Xcrun.killApp(appBundleId);
 
     FlutterDriver? driver;
     addTearDown(() async {

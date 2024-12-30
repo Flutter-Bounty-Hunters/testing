@@ -219,10 +219,10 @@ jobs:
           echo "Checking for app's container on the booted simulator:"
           xcrun simctl get_app_container booted com.flutterbountyhunters.deeplinks.example
 
-      - name: Launch the app on the simulator just to prove we can
-        run: |
-          echo "Launching the installed app to prove that we can..."
-          xcrun simctl launch booted com.flutterbountyhunters.deeplinks.example
+#      - name: Launch the app on the simulator just to prove we can
+#        run: |
+#          echo "Launching the installed app to prove that we can..."
+#          xcrun simctl launch booted com.flutterbountyhunters.deeplinks.example
 
       - name: Run the iOS deep link tests
         run: flutter test test_driver/deep_link_ios_test.dart
