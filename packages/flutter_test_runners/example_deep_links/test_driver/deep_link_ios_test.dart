@@ -19,20 +19,21 @@ void main() {
       print(Process.runSync('env', []).stdout);
 
       print("Running the command...");
-      final process = await Process.start(
-        "xcrun",
-        [
-          "simctl",
-          "get_app_container",
-          "booted",
-          "com.flutterbountyhunters.deeplinks.example",
-        ],
-        environment: {
-          'FLUTTER_TEST': 'false',
-        },
-        runInShell: true,
-        includeParentEnvironment: false,
-      );
+      final process = await Process.start("pwd", []);
+      // final process = await Process.start(
+      //   "xcrun",
+      //   [
+      //     "simctl",
+      //     "get_app_container",
+      //     "booted",
+      //     "com.flutterbountyhunters.deeplinks.example",
+      //   ],
+      //   environment: {
+      //     'FLUTTER_TEST': 'false',
+      //   },
+      //   runInShell: true,
+      //   includeParentEnvironment: false,
+      // );
       process.stdout.transform(utf8.decoder).listen((data) {
         print("STDOUT:\n$data");
       });
