@@ -222,14 +222,14 @@ jobs:
 
       - name: Take a screenshot of the simulator
         run: |
-          mkdir -p simulator-screenshots
-          xcrun simctl io booted screenshot ./simulator-screenshots/screenshot.png
+          mkdir -p ~/simulator-screenshots
+          xcrun simctl io booted screenshot ~/simulator-screenshots/screenshot.png
 
       - name: Upload simulator screenshot as Artifact
         uses: actions/upload-artifact@v3
         with:
           name: simulator-screenshot
-          path: simulator-screenshots/screenshot.png
+          path: ~/simulator-screenshots/screenshot.png
 
       - name: Check for installed app on simulator
         run: |
