@@ -44,6 +44,7 @@ void testDeepLinkIosAppLaunch(
     });
 
     // Ensure the app isn't running yet.
+    _log.info("Checking if the app is running...");
     expect(await Xcrun.isAppRunning(appBundleId), isFalse);
     _log.info("We've verified the app isn't running");
 

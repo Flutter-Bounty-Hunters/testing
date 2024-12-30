@@ -98,7 +98,7 @@ class Xcrun {
 
   /// Kills the app with the given [appBundleId] ID, e.g., `com.acme.myapp`.
   static Future<void> killApp(String appBundleId) async {
-    await Process.run("sh", ["-c", "xcrun", "simctl", "terminate", "booted", appBundleId]);
+    await Process.run("xcrun", ["simctl", "terminate", "booted", appBundleId]);
   }
 
   /// Clears all logs in the iOS log stream.
