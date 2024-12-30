@@ -121,12 +121,17 @@ class Xcrun {
 
   /// Kills the app with the given [appBundleId] ID, e.g., `com.acme.myapp`.
   static Future<void> killApp(String appBundleId) async {
-    // final result = await _runInShell(["xcrun", "simctl", "terminate", "booted", appBundleId]);
+    // final result = await Process.run(
+    //   "xcrun",
+    //   ["simctl", "terminate", "booted", appBundleId],
+    //   runInShell: true,
+    // );
+
     final result = await Process.run(
-      "xcrun",
-      ["simctl", "terminate", "booted", appBundleId],
-      runInShell: true,
+      "sh",
+      ["-c", "xcrun simctl terminate booted $appBundleId"],
     );
+
     print("Killed app - exit code: ${result.exitCode}");
   }
 
