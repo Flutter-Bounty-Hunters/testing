@@ -170,6 +170,25 @@ jobs:
       - name: Build the app
         run: flutter build ios --debug --verbose --no-codesign
 
+      - name: Check for built app
+        run: |
+          echo "Checking for app build artifacts..."
+          echo "build/"
+          ls -la build
+          echo ""
+          
+          echo "build/ios/"
+          ls -la build/ios
+          echo ""
+          
+          echo "build/ios/Debug-iphoneos/"
+          ls -la build/ios/Debug-iphoneos
+          echo ""
+          
+          echo "build/ios/iphoneos/"
+          ls -la build/ios/iphoneos
+          echo ""
+
 #      - name: Build iOS App
 #        run: flutter build ipa --debug --verbose --export-options-plist=$EXPORT_OPTS_PATH
 #
