@@ -240,7 +240,7 @@ jobs:
         run: ps aux | grep simctl
 
       - name: Kill any simctl processes
-        run: pkill -f simctl
+        run: pkill -f runner
 
       #      - name: Launch the app on the simulator just to prove we can
 #        run: |
