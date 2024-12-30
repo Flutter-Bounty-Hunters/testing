@@ -53,9 +53,7 @@ void main() {
         "sh",
         [
           "-c",
-          "xcrun",
-          "simctl",
-          "list",
+          "xcrun simctl list",
         ],
       );
       print("result1: ${result1.exitCode}");
@@ -66,11 +64,7 @@ void main() {
         "sh",
         [
           "-c",
-          "xcrun",
-          "simctl",
-          "get_app_container",
-          "booted",
-          "com.flutterbountyhunters.deeplinks.example",
+          "xcrun simctl get_app_container booted com.flutterbountyhunters.deeplinks.example",
         ],
       );
       print("result2: ${result2.exitCode}");
