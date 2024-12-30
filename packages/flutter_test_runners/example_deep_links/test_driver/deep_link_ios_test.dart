@@ -62,10 +62,20 @@ void main() {
       //   ["simctl", "terminate", "booted", "'$appBundleId'"],
       // );
 
-      final process = await Process.start(
-        "sh",
-        ["-c", "xcrun simctl terminate booted '$appBundleId'"],
-      );
+      // CI Timeout
+      // final process = await Process.start(
+      //   "sh",
+      //   ["-c", "xcrun simctl terminate booted '$appBundleId'"],
+      // );
+
+      final script = '''
+  #!/bin/bash
+  xcrun simctl terminate booted $appBundleId
+  ''';
+      final tempFile = File('/tmp/temp_script.sh');
+      await tempFile.writeAsString(script);
+      await Process.run('chmod', ['+x', tempFile.path]);
+      final process = await Process.start('/bin/bash', [tempFile.path]);
 
       print("terminate command process was started");
 
