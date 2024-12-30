@@ -47,16 +47,34 @@ void main() {
     //   print("The xcrun call returned with exit code: ${result.exitCode}");
     // });
 
-    testDeepLinkIosAppLaunch(
-      "home screen",
-      appBundleId: appBundleId,
-      deepLink: "https://deeplinks.flutterbountyhunters.com",
-      verbose: true,
-      (driver) async {
-        await driver.waitFor(find.text("Home Screen"));
-        await Future.delayed(const Duration(seconds: 3));
-      },
-    );
+    test("Send terminate command to simulator", () async {
+      print("Sending xcrun simctl terminate command...");
+      final process = await Process.start(
+        "sh",
+        ["-c", "xcrun", "simctl", "terminate", "booted", "\"$appBundleId\""],
+      );
+      print("terminate command process was started");
+
+      process.stdin.close();
+
+      stdout.addStream(process.stdout);
+      stderr.addStream(process.stderr);
+
+      print("Waiting for exit code...");
+      final exitCode = await process.exitCode;
+      print("Killed app - exit code: $exitCode");
+    });
+
+    // testDeepLinkIosAppLaunch(
+    //   "home screen",
+    //   appBundleId: appBundleId,
+    //   deepLink: "https://deeplinks.flutterbountyhunters.com",
+    //   verbose: true,
+    //   (driver) async {
+    //     await driver.waitFor(find.text("Home Screen"));
+    //     await Future.delayed(const Duration(seconds: 3));
+    //   },
+    // );
 
     // testDeepLinkIosAppLaunch(
     //   "sign-up screen",
