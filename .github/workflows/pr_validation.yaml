@@ -239,6 +239,9 @@ jobs:
       - name: Check for other processes using the simulator
         run: ps aux | grep simctl
 
+      - name: Kill any simctl processes
+        run: pkill -f simctl
+
       #      - name: Launch the app on the simulator just to prove we can
 #        run: |
 #          echo "Launching the installed app to prove that we can..."
