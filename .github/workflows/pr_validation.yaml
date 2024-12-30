@@ -214,6 +214,12 @@ jobs:
       - name: Install the app
         run: xcrun simctl install booted build/ios/iphonesimulator/Runner.app
 
+      - name: Ensure simulator is booted
+        run: xcrun simctl bootstatus booted
+
+      - name: Check the simulator UI
+        run: xcrun simctl ui booted appearance
+
       - name: Check for installed app on simulator
         run: |
           echo "Checking for app's container on the booted simulator:"
