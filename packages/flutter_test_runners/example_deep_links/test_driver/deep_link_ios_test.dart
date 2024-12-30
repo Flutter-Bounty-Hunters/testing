@@ -55,7 +55,7 @@ void main() {
       // );
       final process = await Process.start(
         "xcrun",
-        ["simctl", "terminate", "booted", "\"$appBundleId\""],
+        ["simctl", "terminate", "booted", "'$appBundleId'"],
         runInShell: true,
       );
       print("terminate command process was started");
