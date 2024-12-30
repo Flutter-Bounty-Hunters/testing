@@ -30,6 +30,8 @@ void main() {
         environment: {
           'FLUTTER_TEST': 'false',
         },
+        runInShell: true,
+        mode: ProcessStartMode.detachedWithStdio,
       );
       process.stdout.transform(utf8.decoder).listen((data) {
         print("STDOUT:\n$data");
@@ -40,7 +42,7 @@ void main() {
       print("The process started...");
       print("Closing stdin");
       process.stdin.close();
-      print("Waiting for exist code...");
+      print("Waiting for exit code...");
       final exitCode = await process.exitCode;
       print("The xcrun call returned with exit code: $exitCode");
     });
