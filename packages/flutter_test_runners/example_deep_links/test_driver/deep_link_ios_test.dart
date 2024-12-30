@@ -49,11 +49,6 @@ void main() {
 
     test("Send terminate command to simulator", () async {
       print("Sending xcrun simctl terminate command...");
-      // final process = await Process.start(
-      //   "sh",
-      //   ["-c", "xcrun simctl terminate booted '$appBundleId'"],
-      // );
-
       // CI Timeout
       // final process = await Process.start(
       //   "xcrun",
@@ -61,9 +56,15 @@ void main() {
       //   runInShell: true,
       // );
 
+      // CI Timeout
+      // final process = await Process.start(
+      //   "xcrun",
+      //   ["simctl", "terminate", "booted", "'$appBundleId'"],
+      // );
+
       final process = await Process.start(
-        "xcrun",
-        ["simctl", "terminate", "booted", "'$appBundleId'"],
+        "sh",
+        ["-c", "xcrun simctl terminate booted '$appBundleId'"],
       );
 
       print("terminate command process was started");
