@@ -20,8 +20,10 @@ void main() {
 
       print("Running the command...");
       final process = await Process.start(
-        "xcrun",
+        "sh",
         [
+          "-c",
+          "xcrun",
           "simctl",
           "list",
           "--verbose",
