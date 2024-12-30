@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
@@ -18,7 +19,7 @@ void main() {
       print(Process.runSync('env', []).stdout);
 
       print("Running the command...");
-      await Process.run(
+      final process = await Process.start(
         "xcrun",
         [
           "simctl",
@@ -28,7 +29,11 @@ void main() {
         ],
         environment: {'DEVELOPER_DIR': '/Applications/Xcode.app/Contents/Developer'},
       );
-      print("The xcrun call returned without issue");
+      process.stdout.transform(utf8.decoder).listen((data) {});
+      process.stderr.transform(utf8.decoder).listen((data) {});
+      print("The process started...");
+      final exitCode = await process.exitCode;
+      print("The xcrun call returned with exit code: $exitCode");
     });
 
     // testDeepLinkIosAppLaunch(
