@@ -51,7 +51,7 @@ void main() {
       print("Sending xcrun simctl terminate command...");
       final process = await Process.start(
         "sh",
-        ["-c", "xcrun", "simctl", "terminate", "booted", "\"$appBundleId\""],
+        ["-c", "xcrun simctl terminate booted \"$appBundleId\""],
       );
       print("terminate command process was started");
 
