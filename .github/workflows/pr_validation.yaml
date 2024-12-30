@@ -236,11 +236,11 @@ jobs:
           echo "Checking for app's container on the booted simulator:"
           xcrun simctl get_app_container booted com.flutterbountyhunters.deeplinks.example
 
-      - name: Check for other processes using the simulator
-        run: ps aux | grep simctl
-
       - name: Kill any simctl processes
         run: pkill -f runner
+
+      - name: Check for other processes using the simulator
+        run: ps aux | grep simctl
 
       #      - name: Launch the app on the simulator just to prove we can
 #        run: |
