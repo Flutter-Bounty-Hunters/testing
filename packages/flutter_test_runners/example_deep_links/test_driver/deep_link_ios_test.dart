@@ -29,8 +29,12 @@ void main() {
         ],
         environment: {'DEVELOPER_DIR': '/Applications/Xcode.app/Contents/Developer'},
       );
-      process.stdout.transform(utf8.decoder).listen((data) {});
-      process.stderr.transform(utf8.decoder).listen((data) {});
+      process.stdout.transform(utf8.decoder).listen((data) {
+        print("STDOUT:\n$data");
+      });
+      process.stderr.transform(utf8.decoder).listen((data) {
+        print("STDERR:\n$data");
+      });
       print("The process started...");
       final exitCode = await process.exitCode;
       print("The xcrun call returned with exit code: $exitCode");
