@@ -132,9 +132,10 @@ class Xcrun {
       "sh",
       ["-c", "xcrun simctl terminate booted $appBundleId"],
       runInShell: true,
-      includeParentEnvironment: false,
     );
     print("terminate command process was started");
+
+    process.stdin.close();
 
     process.stdout.transform(utf8.decoder).listen((log) {
       print("terminate command log: $log");
@@ -144,6 +145,7 @@ class Xcrun {
       print("terminate command error: $error");
     });
 
+    print("Waiting for exit code...");
     final exitCode = await process.exitCode;
     print("Killed app - exit code: $exitCode");
   }
