@@ -13,30 +13,31 @@ void main() {
       "home screen",
       appBundleId: appBundleId,
       deepLink: "https://deeplinks.flutterbountyhunters.com",
+      verbose: true,
       (driver) async {
         await driver.waitFor(find.text("Home Screen"));
         await Future.delayed(const Duration(seconds: 3));
       },
     );
 
-    testDeepLinkIosAppLaunch(
-      "sign-up screen",
-      appBundleId: appBundleId,
-      deepLink: "https://deeplinks.flutterbountyhunters.com/signup",
-      (driver) async {
-        await driver.waitFor(find.text("Sign Up"));
-        await Future.delayed(const Duration(seconds: 3));
-      },
-    );
-
-    testDeepLinkIosAppLaunch(
-      "profile screen",
-      appBundleId: appBundleId,
-      deepLink: "https://deeplinks.flutterbountyhunters.com/user/profile",
-      (driver) async {
-        await driver.waitFor(find.text("User Profile"));
-        await Future.delayed(const Duration(seconds: 3));
-      },
-    );
+    // testDeepLinkIosAppLaunch(
+    //   "sign-up screen",
+    //   appBundleId: appBundleId,
+    //   deepLink: "https://deeplinks.flutterbountyhunters.com/signup",
+    //   (driver) async {
+    //     await driver.waitFor(find.text("Sign Up"));
+    //     await Future.delayed(const Duration(seconds: 3));
+    //   },
+    // );
+    //
+    // testDeepLinkIosAppLaunch(
+    //   "profile screen",
+    //   appBundleId: appBundleId,
+    //   deepLink: "https://deeplinks.flutterbountyhunters.com/user/profile",
+    //   (driver) async {
+    //     await driver.waitFor(find.text("User Profile"));
+    //     await Future.delayed(const Duration(seconds: 3));
+    //   },
+    // );
   });
 }

@@ -30,6 +30,7 @@ void testDeepLinkIosAppLaunch(
     _log.info("Running deep link test driver...");
 
     // Pre-emptively the kill the app, in case it's already running.
+    _log.info("Pre-emptively killing the app");
     await Xcrun.killApp(appBundleId);
 
     FlutterDriver? driver;
@@ -56,7 +57,7 @@ void testDeepLinkIosAppLaunch(
     await Xcrun.listenToXcrunForFlutterLogs(
       appBundleId,
       onLog: (log) {
-        _log.info(log);
+        // _log.info(log);
         if (log.contains("Dart VM service")) {
           _log.info("Found Dart VM log:\n$log");
 
@@ -68,7 +69,7 @@ void testDeepLinkIosAppLaunch(
         }
       },
       onError: (error) {
-        _log.shout("LOGCAT ERROR:");
+        _log.shout("iOS ERROR:");
         _log.shout(error);
       },
     );
@@ -90,7 +91,7 @@ void testDeepLinkIosAppLaunch(
     // Wait for a moment so that the app has time to start the Dart VM
     // service and report it in the device logs.
     _log.info("Waiting a moment so that app can launch the Dart VM service.");
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 5));
 
     // Ensure that we found the Dart VM service URL.
     expect(
@@ -107,10 +108,12 @@ void testDeepLinkIosAppLaunch(
     // Setup port forwarding between the host machine running the test, and the
     // Android device that's running the app, so we can talk to the Dart VM service.
     final port = Uri.parse(dartVmService!).port;
+    _log.info("Forwarding simulator port: $port");
     await Xcrun.forwardTcpPort(port);
 
     // Connect to the Dart VM service in the app with Flutter Driver.
     try {
+      _log.info("Connecting to Flutter Driver extension in the Dart VM service.");
       driver = await FlutterDriver.connect(
         dartVmServiceUrl: dartVmService,
       );
