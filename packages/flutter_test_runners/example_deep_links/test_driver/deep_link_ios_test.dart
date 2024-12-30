@@ -48,7 +48,37 @@ void main() {
     // });
 
     test("Send terminate command to simulator", () async {
+      print("Running device list command:");
+      final result1 = await Process.run(
+        "sh",
+        [
+          "-c",
+          "xcrun",
+          "simctl",
+          "list",
+        ],
+      );
+      print("result1: ${result1.exitCode}");
+      print("");
+
+      print("Running get_app_container command:");
+      final result2 = await Process.run(
+        "sh",
+        [
+          "-c",
+          "xcrun",
+          "simctl",
+          "get_app_container",
+          "booted",
+          "com.flutterbountyhunters.deeplinks.example",
+        ],
+      );
+      print("result2: ${result2.exitCode}");
+      print("");
+
+      //--------
       print("Sending xcrun simctl terminate command...");
+
       // CI Timeout
       // final process = await Process.start(
       //   "xcrun",
@@ -67,12 +97,13 @@ void main() {
       //   "sh",
       //   ["-c", "xcrun simctl terminate booted '$appBundleId'"],
       // );
-
-      final result = await Process.run(
-        "sh",
-        ["-c", "xcrun simctl terminate booted '$appBundleId'"],
-      );
-      print("Exit code: ${result.exitCode}");
+      //
+      // CI Timeout
+      // final result = await Process.run(
+      //   "sh",
+      //   ["-c", "xcrun simctl terminate booted '$appBundleId'"],
+      // );
+      // print("Exit code: ${result.exitCode}");
 
       // CI Timeout
       //     final script = '''
