@@ -208,8 +208,11 @@ jobs:
           xcrun simctl boot "$SIMULATOR_ID"
           xcrun simctl list devices booted
 
+      # Install the app using xcrun. Apparently, there's no Flutter command to
+      # install an unsigned iOS app. The "flutter install" command only works if
+      # the app is signed.
       - name: Install the app
-        run: flutter install --debug --verbose
+        run: xcrun simctl install booted build/ios/iphoneos/Runner.app
 
       - name: Run the iOS deep link tests
         run: flutter test test_driver/deep_link_ios_test.dart
