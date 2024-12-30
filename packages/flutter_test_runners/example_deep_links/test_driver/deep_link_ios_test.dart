@@ -31,7 +31,7 @@ void main() {
           'FLUTTER_TEST': 'false',
         },
         runInShell: true,
-        mode: ProcessStartMode.detachedWithStdio,
+        mode: ProcessStartMode.inheritStdio,
       );
       process.stdout.transform(utf8.decoder).listen((data) {
         print("STDOUT:\n$data");
