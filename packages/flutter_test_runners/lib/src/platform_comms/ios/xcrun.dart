@@ -128,14 +128,24 @@ class Xcrun {
     // );
 
     print("Sending xcrun simctl terminate command...");
-    final result = await Process.run(
+    final process = await Process.start(
       "sh",
       ["-c", "xcrun simctl terminate booted $appBundleId"],
       runInShell: true,
       includeParentEnvironment: false,
     );
+    print("terminate command process was started");
 
-    print("Killed app - exit code: ${result.exitCode}");
+    process.stdout.transform(utf8.decoder).listen((log) {
+      print("terminate command log: $log");
+    });
+
+    process.stderr.transform(utf8.decoder).listen((error) {
+      print("terminate command error: $error");
+    });
+
+    final exitCode = await process.exitCode;
+    print("Killed app - exit code: $exitCode");
   }
 
   /// Clears all logs in the iOS log stream.
