@@ -9,11 +9,25 @@ class Xcrun {
   /// A return value of `true` doesn't mean the app is visible. The app might
   /// be in the background, but still in memory.
   static Future<bool> isAppRunning(String appBundleId) async {
-    final result = await Process.run(
-      "sh",
-      ["-c", "xcrun simctl spawn booted launchctl list | grep \"$appBundleId\""],
-    );
+    // final result = await Process.run(
+    //   "sh",
+    //   [
+    //     "-c",
+    //     "xcrun simctl spawn booted launchctl list | grep \"$appBundleId\"",
+    //   ],
+    //   runInShell: true,
+    // );
+
+    // final result = await Process.run("sh", [
+    //   "-c",
+    //   "xcrun simctl spawn booted launchctl list | grep \"$appBundleId\"",
+    // ]);
+
+    final result = await _runInShell([
+      "xcrun simctl spawn booted launchctl list | grep \"$appBundleId\"",
+    ]);
     final output = result.stdout;
+    print("Is app running? ${output != null && output is String && output.isNotEmpty}");
     return output != null && output is String && output.isNotEmpty;
   }
 
@@ -28,18 +42,24 @@ class Xcrun {
     void Function(String)? onLog,
     void Function(String)? onError,
   }) async {
-    final result = await Process.start("xcrun", [
-      "simctl",
-      "spawn",
-      "booted",
-      "log",
-      "stream",
-      "--level",
-      "debug",
-      // Only log things related to the desired app.
-      "--predicate",
-      "(eventMessage CONTAINS '$appBundleId' OR eventMessage CONTAINS 'flutter')",
-    ]);
+    // This command doesn't work when run with a "sh -c". It also doesn't
+    // work when concatenating the args into a single string.
+    final result = await Process.start(
+      "xcrun",
+      [
+        "simctl",
+        "spawn",
+        "booted",
+        "log",
+        "stream",
+        "--level",
+        "debug",
+        // Only log things related to the desired app.
+        "--predicate",
+        "(eventMessage CONTAINS '$appBundleId' OR eventMessage CONTAINS 'flutter')",
+      ],
+      runInShell: true,
+    );
 
     result.stdout.transform(utf8.decoder).listen(onLog);
     result.stderr.transform(utf8.decoder).listen(onError);
@@ -52,8 +72,8 @@ class Xcrun {
   ///
   /// This is useful, for example, when you want to connect to the Dart VM service
   /// running in a debug Flutter app on an iOS device.
-  static Future<void> forwardTcpPort(int port) async {
-    await Process.run("xcrun", ["simctl", "port", "forward", "booted", "$port:$port"]);
+  static Future<void> forwardTcpPort(int port) {
+    return _runInShell(["xcrun", "simctl", "port", "forward", "booted", "$port:$port"]);
   }
 
   /// Tells iOS to launch the given Universal Link, which might launch an app, if
@@ -62,13 +82,16 @@ class Xcrun {
   /// The structure of the deep link is determined by the given app.
   static Future<void> launchAppWithUniversalLink({
     required String universalLink,
-  }) async {
-    // Not sure why we need to dispatch through a shell, but if we try to
-    // run the xcrun command directly, the deep link doesn't launch.
-    await Process.run("sh", [
-      "-c",
-      "xcrun simctl openurl booted \"$universalLink\"",
-    ]);
+  }) {
+    // Note: This command only works when run with "sh" and the
+    // command as a single string. If the command is passed as
+    // individual arguments, it doesn't work. If the command is
+    // run without "sh" and `runInShell` is `true`, it won't work.
+    return _runInShell(["xcrun simctl openurl booted \"$universalLink\""]);
+    // return Process.run(
+    //   "sh",
+    //   ["-c", "xcrun simctl openurl booted \"$universalLink\""],
+    // );
   }
 
   /// Waits for the app with the given [appBundleId] to appear in memory.
@@ -98,11 +121,37 @@ class Xcrun {
 
   /// Kills the app with the given [appBundleId] ID, e.g., `com.acme.myapp`.
   static Future<void> killApp(String appBundleId) async {
-    await Process.run("xcrun", ["simctl", "terminate", "booted", appBundleId]);
+    // final result = await _runInShell(["xcrun", "simctl", "terminate", "booted", appBundleId]);
+    final result = await Process.run(
+      "xcrun",
+      ["simctl", "terminate", "booted", appBundleId],
+      runInShell: true,
+    );
+    print("Killed app - exit code: ${result.exitCode}");
   }
 
   /// Clears all logs in the iOS log stream.
   static Future<void> clearLogcat() async {
-    await Process.run("xcrun", ["simctl", "spawn", "booted", "log", "erase"]);
+    await _runInShell(["xcrun", "simctl", "spawn", "booted", "log", "erase"]);
+  }
+
+  static Future<Process> _startInShell(List<String> commandAndArgs) {
+    return Process.start("sh", ["-c", ...commandAndArgs]);
+
+    // return Process.start(
+    //   commandAndArgs.first,
+    //   commandAndArgs.length > 1 ? commandAndArgs.sublist(1) : [],
+    //   runInShell: true,
+    // );
+  }
+
+  static Future<ProcessResult> _runInShell(List<String> commandAndArgs) {
+    print("Sending shell command: '${commandAndArgs.join(" ")}'");
+    return Process.run("sh", ["-c", ...commandAndArgs]);
+    // return Process.run(
+    //   commandAndArgs.first,
+    //   commandAndArgs.length > 1 ? commandAndArgs.sublist(1) : [],
+    //   runInShell: true,
+    // );
   }
 }

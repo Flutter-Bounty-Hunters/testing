@@ -30,8 +30,8 @@ void testDeepLinkIosAppLaunch(
     _log.info("Running deep link test driver...");
 
     // Pre-emptively the kill the app, in case it's already running.
-    // _log.info("Pre-emptively killing the app");
-    // await Xcrun.killApp(appBundleId);
+    _log.info("Pre-emptively killing the app");
+    await Xcrun.killApp(appBundleId);
 
     FlutterDriver? driver;
     addTearDown(() async {
@@ -44,9 +44,9 @@ void testDeepLinkIosAppLaunch(
     });
 
     // Ensure the app isn't running yet.
-    // _log.info("Checking if the app is running...");
-    // expect(await Xcrun.isAppRunning(appBundleId), isFalse);
-    // _log.info("We've verified the app isn't running");
+    _log.info("Checking if the app is running...");
+    expect(await Xcrun.isAppRunning(appBundleId), isFalse);
+    _log.info("We've verified the app isn't running");
 
     // Clear previous logcat messages so we don't try to connect to a previous
     // Dart VM service listing.

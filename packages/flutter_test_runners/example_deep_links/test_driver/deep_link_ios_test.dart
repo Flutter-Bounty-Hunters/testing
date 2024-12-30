@@ -12,51 +12,51 @@ void main() {
   // xcrun simctl openurl booted https://deeplinks.flutterbountyhunters.com
 
   group("Deep link launches app > iOS >", () {
-    test("xcrun sanity check", () async {
-      print("Running xcrun Process sanity check.");
+    // test("xcrun sanity check", () async {
+    //   print("Running xcrun Process sanity check.");
+    //
+    //   // print("Env variables:");
+    //   // print(Process.runSync('env', []).stdout);
+    //
+    //   print("Running the command...");
+    //   final result = await Process.run(
+    //     "sh",
+    //     [
+    //       "-c",
+    //       "xcrun",
+    //       "simctl",
+    //       // "list",
+    //       // "--verbose",
+    //       "get_app_container",
+    //       "booted",
+    //       "com.flutterbountyhunters.deeplinks.example",
+    //     ],
+    //   );
+    //   // process.stdout.transform(utf8.decoder).listen((data) {
+    //   //   print("STDOUT:\n$data");
+    //   // });
+    //   // process.stderr.transform(utf8.decoder).listen((data) {
+    //   //   print("STDERR:\n$data");
+    //   // });
+    //   // print("The process started...");
+    //   // print("Closing stdin");
+    //   // process.stdin.close();
+    //   // print("Waiting for exit code...");
+    //   // final exitCode = await process.exitCode;
+    //   // print("The xcrun call returned with exit code: $exitCode");
+    //   print("The xcrun call returned with exit code: ${result.exitCode}");
+    // });
 
-      // print("Env variables:");
-      // print(Process.runSync('env', []).stdout);
-
-      print("Running the command...");
-      final result = await Process.run(
-        "sh",
-        [
-          "-c",
-          "xcrun",
-          "simctl",
-          // "list",
-          // "--verbose",
-          "get_app_container",
-          "booted",
-          "com.flutterbountyhunters.deeplinks.example",
-        ],
-      );
-      // process.stdout.transform(utf8.decoder).listen((data) {
-      //   print("STDOUT:\n$data");
-      // });
-      // process.stderr.transform(utf8.decoder).listen((data) {
-      //   print("STDERR:\n$data");
-      // });
-      // print("The process started...");
-      // print("Closing stdin");
-      // process.stdin.close();
-      // print("Waiting for exit code...");
-      // final exitCode = await process.exitCode;
-      // print("The xcrun call returned with exit code: $exitCode");
-      print("The xcrun call returned with exit code: ${result.exitCode}");
-    });
-
-    // testDeepLinkIosAppLaunch(
-    //   "home screen",
-    //   appBundleId: appBundleId,
-    //   deepLink: "https://deeplinks.flutterbountyhunters.com",
-    //   verbose: true,
-    //   (driver) async {
-    //     await driver.waitFor(find.text("Home Screen"));
-    //     await Future.delayed(const Duration(seconds: 3));
-    //   },
-    // );
+    testDeepLinkIosAppLaunch(
+      "home screen",
+      appBundleId: appBundleId,
+      deepLink: "https://deeplinks.flutterbountyhunters.com",
+      verbose: true,
+      (driver) async {
+        await driver.waitFor(find.text("Home Screen"));
+        await Future.delayed(const Duration(seconds: 3));
+      },
+    );
 
     // testDeepLinkIosAppLaunch(
     //   "sign-up screen",
