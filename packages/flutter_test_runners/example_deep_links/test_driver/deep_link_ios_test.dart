@@ -68,25 +68,32 @@ void main() {
       //   ["-c", "xcrun simctl terminate booted '$appBundleId'"],
       // );
 
-      final script = '''
-  #!/bin/bash
-  xcrun simctl terminate booted $appBundleId
-  ''';
-      final tempFile = File('/tmp/temp_script.sh');
-      await tempFile.writeAsString(script);
-      await Process.run('chmod', ['+x', tempFile.path]);
-      final process = await Process.start('/bin/bash', [tempFile.path]);
+      final result = await Process.run(
+        "sh",
+        ["-c", "xcrun simctl terminate booted '$appBundleId'"],
+      );
+      print("Exit code: ${result.exitCode}");
 
-      print("terminate command process was started");
-
-      process.stdin.close();
-
-      stdout.addStream(process.stdout);
-      stderr.addStream(process.stderr);
-
-      print("Waiting for exit code...");
-      final exitCode = await process.exitCode;
-      print("Killed app - exit code: $exitCode");
+      // CI Timeout
+      //     final script = '''
+      // #!/bin/bash
+      // xcrun simctl terminate booted $appBundleId
+      // ''';
+      //     final tempFile = File('/tmp/temp_script.sh');
+      //     await tempFile.writeAsString(script);
+      //     await Process.run('chmod', ['+x', tempFile.path]);
+      //     final process = await Process.start('/bin/bash', [tempFile.path]);
+      //
+      //     print("terminate command process was started");
+      //
+      //     process.stdin.close();
+      //
+      //     stdout.addStream(process.stdout);
+      //     stderr.addStream(process.stderr);
+      //
+      //     print("Waiting for exit code...");
+      //     final exitCode = await process.exitCode;
+      //     print("Killed app - exit code: $exitCode");
     });
 
     // testDeepLinkIosAppLaunch(
