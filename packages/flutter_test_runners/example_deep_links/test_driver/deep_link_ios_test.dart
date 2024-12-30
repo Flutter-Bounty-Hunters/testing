@@ -19,7 +19,7 @@ void main() {
       // print(Process.runSync('env', []).stdout);
 
       print("Running the command...");
-      final process = await Process.start(
+      final result = await Process.run(
         "sh",
         [
           "-c",
@@ -32,18 +32,19 @@ void main() {
           "com.flutterbountyhunters.deeplinks.example",
         ],
       );
-      process.stdout.transform(utf8.decoder).listen((data) {
-        print("STDOUT:\n$data");
-      });
-      process.stderr.transform(utf8.decoder).listen((data) {
-        print("STDERR:\n$data");
-      });
-      print("The process started...");
-      print("Closing stdin");
-      process.stdin.close();
-      print("Waiting for exit code...");
-      final exitCode = await process.exitCode;
-      print("The xcrun call returned with exit code: $exitCode");
+      // process.stdout.transform(utf8.decoder).listen((data) {
+      //   print("STDOUT:\n$data");
+      // });
+      // process.stderr.transform(utf8.decoder).listen((data) {
+      //   print("STDERR:\n$data");
+      // });
+      // print("The process started...");
+      // print("Closing stdin");
+      // process.stdin.close();
+      // print("Waiting for exit code...");
+      // final exitCode = await process.exitCode;
+      // print("The xcrun call returned with exit code: $exitCode");
+      print("The xcrun call returned with exit code: ${result.exitCode}");
     });
 
     // testDeepLinkIosAppLaunch(
