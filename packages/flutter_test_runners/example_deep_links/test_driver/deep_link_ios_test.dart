@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:flutter_test_runners/flutter_test_runners.dart';
 import 'package:test/test.dart';
@@ -9,6 +11,17 @@ void main() {
   // xcrun simctl openurl booted https://deeplinks.flutterbountyhunters.com
 
   group("Deep link launches app > iOS >", () {
+    test("xcrun sanity check", () async {
+      print("Running xcrun Process sanity check...");
+      await Process.run("xcrun", [
+        "simctl",
+        "get_app_container",
+        "booted",
+        "com.flutterbountyhunters.deeplinks.example",
+      ]);
+      print("The xcrun call returned without issue");
+    });
+
     testDeepLinkIosAppLaunch(
       "home screen",
       appBundleId: appBundleId,
