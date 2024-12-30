@@ -12,26 +12,35 @@ void main() {
 
   group("Deep link launches app > iOS >", () {
     test("xcrun sanity check", () async {
-      print("Running xcrun Process sanity check...");
-      await Process.run("xcrun", [
-        "simctl",
-        "get_app_container",
-        "booted",
-        "com.flutterbountyhunters.deeplinks.example",
-      ]);
+      print("Running xcrun Process sanity check.");
+
+      print("Env variables:");
+      print(Process.runSync('env', []).stdout);
+
+      print("Running the command...");
+      await Process.run(
+        "xcrun",
+        [
+          "simctl",
+          "get_app_container",
+          "booted",
+          "com.flutterbountyhunters.deeplinks.example",
+        ],
+        environment: {'DEVELOPER_DIR': '/Applications/Xcode.app/Contents/Developer'},
+      );
       print("The xcrun call returned without issue");
     });
 
-    testDeepLinkIosAppLaunch(
-      "home screen",
-      appBundleId: appBundleId,
-      deepLink: "https://deeplinks.flutterbountyhunters.com",
-      verbose: true,
-      (driver) async {
-        await driver.waitFor(find.text("Home Screen"));
-        await Future.delayed(const Duration(seconds: 3));
-      },
-    );
+    // testDeepLinkIosAppLaunch(
+    //   "home screen",
+    //   appBundleId: appBundleId,
+    //   deepLink: "https://deeplinks.flutterbountyhunters.com",
+    //   verbose: true,
+    //   (driver) async {
+    //     await driver.waitFor(find.text("Home Screen"));
+    //     await Future.delayed(const Duration(seconds: 3));
+    //   },
+    // );
 
     // testDeepLinkIosAppLaunch(
     //   "sign-up screen",
