@@ -25,13 +25,13 @@ class Xcrun {
     // ]);
 
     print("Trying command through shell - no grep...");
-    final result = await _runInShell([
+    var result = await _runInShell([
       "xcrun simctl spawn booted launchctl list",
     ]);
     print("Done with command without grep");
 
     print("Trying command through shell with '| grep'...");
-    final result = await _runInShell([
+    result = await _runInShell([
       "xcrun simctl spawn booted launchctl list | grep \"$appBundleId\"",
     ]);
     final output = result.stdout;
