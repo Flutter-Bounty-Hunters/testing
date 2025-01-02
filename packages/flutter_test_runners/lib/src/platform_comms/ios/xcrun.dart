@@ -169,7 +169,7 @@ class Xcrun {
 
   static Future<ProcessResult> _runInShell(List<String> commandAndArgs) async {
     print("Sending shell command: '${commandAndArgs.join(" ")}'");
-    final result = await Process.run("sh", ["-c", ...commandAndArgs]);
+    final result = await Process.run("sh", ["--verbose", "--debug", "-c", ...commandAndArgs]);
     print("Shell command exit code: ${result.exitCode}");
     return result;
 
