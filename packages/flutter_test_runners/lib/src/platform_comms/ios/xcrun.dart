@@ -130,7 +130,7 @@ class Xcrun {
     print("Sending xcrun simctl terminate command...");
     final process = await Process.start(
       "sh",
-      ["-c", "xcrun", "simctl", "terminate", "booted", appBundleId],
+      ["-c", "xcrun simctl terminate booted $appBundleId"],
     );
     print("terminate command process was started");
 
@@ -167,9 +167,12 @@ class Xcrun {
     // );
   }
 
-  static Future<ProcessResult> _runInShell(List<String> commandAndArgs) {
+  static Future<ProcessResult> _runInShell(List<String> commandAndArgs) async {
     print("Sending shell command: '${commandAndArgs.join(" ")}'");
-    return Process.run("sh", ["-c", ...commandAndArgs]);
+    final result = await Process.run("sh", ["-c", ...commandAndArgs]);
+    print("Shell command exit code: ${result.exitCode}");
+    return result;
+
     // return Process.run(
     //   commandAndArgs.first,
     //   commandAndArgs.length > 1 ? commandAndArgs.sublist(1) : [],
