@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter_test_runners/flutter_test_runners.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -44,90 +45,90 @@ void main() {
     //   print("The xcrun call returned with exit code: ${result.exitCode}");
     // });
 
-    test("Send terminate command to simulator", () async {
-      print("Running device list command:");
-      final result1 = await Process.run(
-        "sh",
-        [
-          "-c",
-          "xcrun simctl list",
-        ],
-      );
-      print("result1: ${result1.exitCode}");
-      print("");
+    // test("Send terminate command to simulator", () async {
+    //   print("Running device list command:");
+    //   final result1 = await Process.run(
+    //     "sh",
+    //     [
+    //       "-c",
+    //       "xcrun simctl list",
+    //     ],
+    //   );
+    //   print("result1: ${result1.exitCode}");
+    //   print("");
+    //
+    //   print("Running get_app_container command:");
+    //   final result2 = await Process.run(
+    //     "sh",
+    //     [
+    //       "-c",
+    //       "xcrun simctl get_app_container booted com.flutterbountyhunters.deeplinks.example",
+    //     ],
+    //   );
+    //   print("result2: ${result2.exitCode}");
+    //   print("");
+    //
+    //   //--------
+    //   print("Sending xcrun simctl terminate command...");
+    //
+    //   // CI Timeout
+    //   // final process = await Process.start(
+    //   //   "xcrun",
+    //   //   ["simctl", "terminate", "booted", "'$appBundleId'"],
+    //   //   runInShell: true,
+    //   // );
+    //
+    //   // CI Timeout
+    //   // final process = await Process.start(
+    //   //   "xcrun",
+    //   //   ["simctl", "terminate", "booted", "'$appBundleId'"],
+    //   // );
+    //
+    //   // CI Timeout
+    //   // final process = await Process.start(
+    //   //   "sh",
+    //   //   ["-c", "xcrun simctl terminate booted '$appBundleId'"],
+    //   // );
+    //   //
+    //   // CI Timeout
+    //   // final result = await Process.run(
+    //   //   "sh",
+    //   //   ["-c", "xcrun simctl terminate booted '$appBundleId'"],
+    //   // );
+    //   // print("Exit code: ${result.exitCode}");
+    //
+    //   // CI Timeout
+    //   //     final script = '''
+    //   // #!/bin/bash
+    //   // xcrun simctl terminate booted $appBundleId
+    //   // ''';
+    //   //     final tempFile = File('/tmp/temp_script.sh');
+    //   //     await tempFile.writeAsString(script);
+    //   //     await Process.run('chmod', ['+x', tempFile.path]);
+    //   //     final process = await Process.start('/bin/bash', [tempFile.path]);
+    //   //
+    //   //     print("terminate command process was started");
+    //   //
+    //   //     process.stdin.close();
+    //   //
+    //   //     stdout.addStream(process.stdout);
+    //   //     stderr.addStream(process.stderr);
+    //   //
+    //   //     print("Waiting for exit code...");
+    //   //     final exitCode = await process.exitCode;
+    //   //     print("Killed app - exit code: $exitCode");
+    // });
 
-      print("Running get_app_container command:");
-      final result2 = await Process.run(
-        "sh",
-        [
-          "-c",
-          "xcrun simctl get_app_container booted com.flutterbountyhunters.deeplinks.example",
-        ],
-      );
-      print("result2: ${result2.exitCode}");
-      print("");
-
-      //--------
-      print("Sending xcrun simctl terminate command...");
-
-      // CI Timeout
-      // final process = await Process.start(
-      //   "xcrun",
-      //   ["simctl", "terminate", "booted", "'$appBundleId'"],
-      //   runInShell: true,
-      // );
-
-      // CI Timeout
-      // final process = await Process.start(
-      //   "xcrun",
-      //   ["simctl", "terminate", "booted", "'$appBundleId'"],
-      // );
-
-      // CI Timeout
-      // final process = await Process.start(
-      //   "sh",
-      //   ["-c", "xcrun simctl terminate booted '$appBundleId'"],
-      // );
-      //
-      // CI Timeout
-      // final result = await Process.run(
-      //   "sh",
-      //   ["-c", "xcrun simctl terminate booted '$appBundleId'"],
-      // );
-      // print("Exit code: ${result.exitCode}");
-
-      // CI Timeout
-      //     final script = '''
-      // #!/bin/bash
-      // xcrun simctl terminate booted $appBundleId
-      // ''';
-      //     final tempFile = File('/tmp/temp_script.sh');
-      //     await tempFile.writeAsString(script);
-      //     await Process.run('chmod', ['+x', tempFile.path]);
-      //     final process = await Process.start('/bin/bash', [tempFile.path]);
-      //
-      //     print("terminate command process was started");
-      //
-      //     process.stdin.close();
-      //
-      //     stdout.addStream(process.stdout);
-      //     stderr.addStream(process.stderr);
-      //
-      //     print("Waiting for exit code...");
-      //     final exitCode = await process.exitCode;
-      //     print("Killed app - exit code: $exitCode");
-    });
-
-    // testDeepLinkIosAppLaunch(
-    //   "home screen",
-    //   appBundleId: appBundleId,
-    //   deepLink: "https://deeplinks.flutterbountyhunters.com",
-    //   verbose: true,
-    //   (driver) async {
-    //     await driver.waitFor(find.text("Home Screen"));
-    //     await Future.delayed(const Duration(seconds: 3));
-    //   },
-    // );
+    testDeepLinkIosAppLaunch(
+      "home screen",
+      appBundleId: appBundleId,
+      deepLink: "https://deeplinks.flutterbountyhunters.com",
+      verbose: true,
+      (driver) async {
+        await driver.waitFor(find.text("Home Screen"));
+        await Future.delayed(const Duration(seconds: 3));
+      },
+    );
 
     // testDeepLinkIosAppLaunch(
     //   "sign-up screen",

@@ -24,6 +24,7 @@ void testDeepLinkIosAppLaunch(
   required String appBundleId,
   required String deepLink,
   bool verbose = false,
+  Duration timeout = const Duration(minutes: 5),
 }) {
   test(description, () async {
     _initLogs(verbose);
@@ -132,7 +133,7 @@ void testDeepLinkIosAppLaunch(
 
     // Run the test.
     await testRunner(driver);
-  });
+  }, timeout: Timeout(timeout));
 }
 
 Future<void> _logVmDetailsAfterConnectionFailure(String dartVmService) async {
