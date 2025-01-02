@@ -9,6 +9,7 @@ class Xcrun {
   /// A return value of `true` doesn't mean the app is visible. The app might
   /// be in the background, but still in memory.
   static Future<bool> isAppRunning(String appBundleId) async {
+    print("isAppRunning() - $appBundleId");
     // final result = await Process.run(
     //   "sh",
     //   [
@@ -23,6 +24,13 @@ class Xcrun {
     //   "xcrun simctl spawn booted launchctl list | grep \"$appBundleId\"",
     // ]);
 
+    print("Trying command through shell - no grep...");
+    final result = await _runInShell([
+      "xcrun simctl spawn booted launchctl list",
+    ]);
+    print("Done with command without grep");
+
+    print("Trying command through shell with '| grep'...");
     final result = await _runInShell([
       "xcrun simctl spawn booted launchctl list | grep \"$appBundleId\"",
     ]);
