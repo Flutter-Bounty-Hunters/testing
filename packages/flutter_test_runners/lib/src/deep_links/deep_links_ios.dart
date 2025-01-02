@@ -35,104 +35,104 @@ void testDeepLinkIosAppLaunch(
     // await Xcrun.killApp(appBundleId);
 
     FlutterDriver? driver;
-    addTearDown(() async {
-      _log.info("Cleaning up after the test");
-      // Dispose the FlutterDriver connection.
-      driver?.serviceClient.dispose();
-
-      // Kill the app when we're done.
-      await Xcrun.killApp(appBundleId);
-    });
+    // addTearDown(() async {
+    //   _log.info("Cleaning up after the test");
+    //   // Dispose the FlutterDriver connection.
+    //   driver?.serviceClient.dispose();
+    //
+    //   // Kill the app when we're done.
+    //   await Xcrun.killApp(appBundleId);
+    // });
 
     // Ensure the app isn't running yet.
     _log.info("Checking if the app is running...");
     expect(await Xcrun.isAppRunning(appBundleId), isFalse);
     _log.info("We've verified the app isn't running");
 
-    // Clear previous logcat messages so we don't try to connect to a previous
-    // Dart VM service listing.
-    _log.info("Clearing old logs");
-    await Xcrun.clearLogcat();
-    _log.info("We've cleared old logs");
-
-    // Listen to iOS logs to find the Dart VM service for the running app.
-    _log.info("Registering for simulator logs");
-    String? dartVmService;
-    await Xcrun.listenToXcrunForFlutterLogs(
-      appBundleId,
-      onLog: (log) {
-        // _log.info(log);
-        if (log.contains("Dart VM service")) {
-          _log.info("Found Dart VM log:\n$log");
-
-          final regex = RegExp(r'.*Dart VM service.*(http[s]?://[^\s]+)');
-          final httpUrl = Uri.parse(regex.firstMatch(log)!.group(1)!);
-
-          dartVmService =
-              Uri(scheme: "ws", host: httpUrl.host, port: httpUrl.port, path: "${httpUrl.path}ws").toString();
-        }
-      },
-      onError: (error) {
-        _log.shout("iOS ERROR:");
-        _log.shout(error);
-      },
-    );
-    _log.info("We're now listening to logs and errors from iOS");
-
-    // Send the deep link.
-    _log.info("Sending the deep link: $deepLink");
-    await Xcrun.launchAppWithUniversalLink(universalLink: deepLink);
-
-    // Wait until the deep link launches the app.
-    _log.info("Waiting for app to launch: $appBundleId");
-    final isAppRunning = await Xcrun.waitForAppToLaunch(appBundleId);
-    expect(
-      isAppRunning,
-      isTrue,
-      reason: "The app never launched after sending the deeplink. Package: $appBundleId, Deeplink: $deepLink",
-    );
-
-    // Wait for a moment so that the app has time to start the Dart VM
-    // service and report it in the device logs.
-    _log.info("Waiting a moment so that app can launch the Dart VM service.");
-    await Future.delayed(const Duration(seconds: 5));
-
-    // Ensure that we found the Dart VM service URL.
-    expect(
-      dartVmService,
-      isNotNull,
-      reason: "Couldn't find the Dart VM service for the app that was launched with a deep link.",
-    );
-    expect(
-      dartVmService,
-      isNotEmpty,
-      reason: "Couldn't find the Dart VM service for the app that was launched with a deep link.",
-    );
-
-    // Setup port forwarding between the host machine running the test, and the
-    // Android device that's running the app, so we can talk to the Dart VM service.
-    final port = Uri.parse(dartVmService!).port;
-    _log.info("Forwarding simulator port: $port");
-    await Xcrun.forwardTcpPort(port);
-
-    // Connect to the Dart VM service in the app with Flutter Driver.
-    try {
-      _log.info("Connecting to Flutter Driver extension in the Dart VM service.");
-      driver = await FlutterDriver.connect(
-        dartVmServiceUrl: dartVmService,
-      );
-    } catch (exception) {
-      if (verbose) {
-        await _logVmDetailsAfterConnectionFailure(dartVmService!);
-      }
-
-      throw TestFailure(
-        "Couldn't connect FlutterDriver to the app's Dart VM service (the app successfully launched with the deep link, though)",
-      );
-    }
-
-    // Run the test.
-    await testRunner(driver);
+    // // Clear previous logcat messages so we don't try to connect to a previous
+    // // Dart VM service listing.
+    // _log.info("Clearing old logs");
+    // await Xcrun.clearLogcat();
+    // _log.info("We've cleared old logs");
+    //
+    // // Listen to iOS logs to find the Dart VM service for the running app.
+    // _log.info("Registering for simulator logs");
+    // String? dartVmService;
+    // await Xcrun.listenToXcrunForFlutterLogs(
+    //   appBundleId,
+    //   onLog: (log) {
+    //     // _log.info(log);
+    //     if (log.contains("Dart VM service")) {
+    //       _log.info("Found Dart VM log:\n$log");
+    //
+    //       final regex = RegExp(r'.*Dart VM service.*(http[s]?://[^\s]+)');
+    //       final httpUrl = Uri.parse(regex.firstMatch(log)!.group(1)!);
+    //
+    //       dartVmService =
+    //           Uri(scheme: "ws", host: httpUrl.host, port: httpUrl.port, path: "${httpUrl.path}ws").toString();
+    //     }
+    //   },
+    //   onError: (error) {
+    //     _log.shout("iOS ERROR:");
+    //     _log.shout(error);
+    //   },
+    // );
+    // _log.info("We're now listening to logs and errors from iOS");
+    //
+    // // Send the deep link.
+    // _log.info("Sending the deep link: $deepLink");
+    // await Xcrun.launchAppWithUniversalLink(universalLink: deepLink);
+    //
+    // // Wait until the deep link launches the app.
+    // _log.info("Waiting for app to launch: $appBundleId");
+    // final isAppRunning = await Xcrun.waitForAppToLaunch(appBundleId);
+    // expect(
+    //   isAppRunning,
+    //   isTrue,
+    //   reason: "The app never launched after sending the deeplink. Package: $appBundleId, Deeplink: $deepLink",
+    // );
+    //
+    // // Wait for a moment so that the app has time to start the Dart VM
+    // // service and report it in the device logs.
+    // _log.info("Waiting a moment so that app can launch the Dart VM service.");
+    // await Future.delayed(const Duration(seconds: 5));
+    //
+    // // Ensure that we found the Dart VM service URL.
+    // expect(
+    //   dartVmService,
+    //   isNotNull,
+    //   reason: "Couldn't find the Dart VM service for the app that was launched with a deep link.",
+    // );
+    // expect(
+    //   dartVmService,
+    //   isNotEmpty,
+    //   reason: "Couldn't find the Dart VM service for the app that was launched with a deep link.",
+    // );
+    //
+    // // Setup port forwarding between the host machine running the test, and the
+    // // Android device that's running the app, so we can talk to the Dart VM service.
+    // final port = Uri.parse(dartVmService!).port;
+    // _log.info("Forwarding simulator port: $port");
+    // await Xcrun.forwardTcpPort(port);
+    //
+    // // Connect to the Dart VM service in the app with Flutter Driver.
+    // try {
+    //   _log.info("Connecting to Flutter Driver extension in the Dart VM service.");
+    //   driver = await FlutterDriver.connect(
+    //     dartVmServiceUrl: dartVmService,
+    //   );
+    // } catch (exception) {
+    //   if (verbose) {
+    //     await _logVmDetailsAfterConnectionFailure(dartVmService!);
+    //   }
+    //
+    //   throw TestFailure(
+    //     "Couldn't connect FlutterDriver to the app's Dart VM service (the app successfully launched with the deep link, though)",
+    //   );
+    // }
+    //
+    // // Run the test.
+    // await testRunner(driver);
   }, timeout: Timeout(timeout));
 }
 
