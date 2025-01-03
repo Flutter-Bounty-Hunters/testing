@@ -28,15 +28,23 @@ class Xcrun {
     var result = await _runInShell([
       "xcrun simctl spawn booted launchctl list",
     ]);
-    print("Done with command without grep");
-
-    print("Trying command through shell with '| grep'...");
-    result = await _runInShell([
-      "xcrun simctl spawn booted launchctl list | grep \"$appBundleId\"",
-    ]);
+    print("Done with command without grep:");
+    print(result.stdout);
     final output = result.stdout;
-    print("Is app running? ${output != null && output is String && output.isNotEmpty}");
-    return output != null && output is String && output.isNotEmpty;
+    if (output is! String) {
+      // We don't know how to handle this.
+      return false;
+    }
+
+    return output.contains(appBundleId);
+
+    // print("Trying command through shell with '| grep'...");
+    // result = await _runInShell([
+    //   "xcrun simctl spawn booted launchctl list | grep \"$appBundleId\"",
+    // ]);
+    // final output = result.stdout;
+    // print("Is app running? ${output != null && output is String && output.isNotEmpty}");
+    // return output != null && output is String && output.isNotEmpty;
   }
 
   /// Starts listening to the running iOS device's log stream, and returns the
