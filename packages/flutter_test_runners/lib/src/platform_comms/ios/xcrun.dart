@@ -169,7 +169,7 @@ class Xcrun {
   }
 
   /// Clears all logs in the iOS log stream.
-  static Future<void> clearLogcat() async {
+  static Future<void> clearLogs() async {
     await _runInShell(["xcrun", "simctl", "spawn", "booted", "log", "erase"]);
   }
 
