@@ -190,7 +190,17 @@ class Xcrun {
     print("Shell command exit code: ${result.exitCode}");
 
     if (result.exitCode != 0) {
-      throw Exception("Failed to execute command in a shell:\n'$command'\nExit code: ${result.exitCode}");
+      throw Exception('''
+Failed to execute command in a shell:
+'$command'
+
+Exit code: ${result.exitCode}
+
+Stdout:
+${result.stdout}
+
+Stderr:
+${result.stderr}''');
     }
 
     return result;
