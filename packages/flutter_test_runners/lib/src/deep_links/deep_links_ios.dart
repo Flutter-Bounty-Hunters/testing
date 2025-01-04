@@ -85,15 +85,15 @@ void testDeepLinkIosAppLaunch(
     _log.info("Sending the deep link: $deepLink");
     await Xcrun.launchAppWithUniversalLink(universalLink: deepLink);
 
-    // // Wait until the deep link launches the app.
-    // _log.info("Waiting for app to launch: $appBundleId");
-    // final isAppRunning = await Xcrun.waitForAppToLaunch(appBundleId);
-    // expect(
-    //   isAppRunning,
-    //   isTrue,
-    //   reason: "The app never launched after sending the deeplink. Package: $appBundleId, Deeplink: $deepLink",
-    // );
-    //
+    // Wait until the deep link launches the app.
+    _log.info("Waiting for app to launch: $appBundleId");
+    final isAppRunning = await Xcrun.waitForAppToLaunch(appBundleId);
+    expect(
+      isAppRunning,
+      isTrue,
+      reason: "The app never launched after sending the deeplink. Package: $appBundleId, Deeplink: $deepLink",
+    );
+
     // // Wait for a moment so that the app has time to start the Dart VM
     // // service and report it in the device logs.
     // _log.info("Waiting a moment so that app can launch the Dart VM service.");
