@@ -1,0 +1,251 @@
+name: Validate PR
+
+on: [pull_request, workflow_dispatch]
+
+jobs:
+#  test_flutter-test-runners_deep-links_android:
+#    runs-on: ubuntu-latest
+#    defaults:
+#      run:
+#        working-directory: ./packages/flutter_test_runners/example_deep_links
+#
+#    steps:
+#      - name: Checkout Repository
+#        uses: actions/checkout@v3
+#
+#      # Need JDK 17 for Android build.
+#      - name: Set up JDK 17
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: 'temurin'
+#          java-version: '17'
+#
+#      # The Android emulator action seems to want to include this.
+#      - name: enable KVM for linux runners
+#        working-directory: ~
+#        run: |
+#          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+#          sudo udevadm control --reload-rules
+#          sudo udevadm trigger --name-match=kvm
+#
+#      - name: Set up Flutter
+#        uses: subosito/flutter-action@v2
+#        with:
+#          channel: stable
+#          architecture: x64
+#
+#      - name: Install Flutter Dependencies
+#        run: flutter pub get
+#
+#      - name: Build Flutter App (Debug Mode)
+#        # Must be debug mode so we can enable Flutter Driver.
+#        run: flutter build apk --debug
+#
+#      - name: Install Android SDK and launch emulator
+#        uses: reactivecircus/android-emulator-runner@v2
+#        with:
+#          api-level: 35
+#          target: default
+#          arch: x86_64
+#          profile: Galaxy Nexus
+#          cores: 2
+#          disk-size: 6000M
+#          heap-size: 600M
+#          sdcard-path-or-size: 100M
+#          avd-name: github-ci-emulator
+#          force-avd-creation: false
+#          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+#          disable-animations: false
+#          script: |
+#            echo "Running emulator..."
+#            echo "Working directory: $(pwd)"
+#
+#            echo "Unlocking the screen"
+#            adb shell input keyevent 82  # Unlock the emulator screen if it's locked
+#            echo ""
+#
+#            echo "Installing the APK"
+#            cd packages/flutter_test_runners/example_deep_links && flutter install --debug -d emulator-5554
+#            echo ""
+#
+#            echo "Running Flutter tests"
+#            cd packages/flutter_test_runners/example_deep_links && flutter test test_driver/deep_link_android_test.dart
+
+  test_flutter-test-runners_deep-links_ios:
+    runs-on: macos-latest
+
+    defaults:
+      run:
+        working-directory: ./packages/flutter_test_runners/example_deep_links
+
+    steps:
+      - name: Set location for ExportOptions.plist
+        working-directory: ~
+        run: |
+          echo "EXPORT_OPTS_PATH=$RUNNER_TEMP/ExportOptions.plist" >> $GITHUB_ENV
+
+      - name: Install the Apple certificate and provisioning profile
+        working-directory: ~
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.SIGNING_CERTIFICATE }}
+          P12_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE }}
+          PP_FILE_NAME: fbh_deep_link_example_app_profile.mobileprovision
+          EXPORT_OPTIONS_PLIST: ${{ secrets.EXPORT_OPTIONS_PLIST }}
+        run: |
+          # Create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/$PP_FILE_NAME
+          KEYCHAIN_PATH=~/Library/Keychains/login.keychain-db
+          
+          # Check keychain status
+          echo "All keychains:"
+          security list-keychains
+          
+          echo "Is keychain unlocked?"
+          security show-keychain-info $KEYCHAIN_PATH
+          
+          # Import certificate and provisioning profile from secrets
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+          
+          # create temporary keychain
+          #security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          #security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          #security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          
+          # Import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+          
+          # Verify certificate was loaded into keychain
+          echo "Verifying that the signing certificate was loaded into the keychain"
+          security find-identity -p codesigning -v
+          
+          # Apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          
+          # List all provisioning profiles to make sure we placed it correctly
+          echo "Listing all provisioning profiles in the CI server"
+          ls ~/Library/MobileDevice/Provisioning\ Profiles/
+          echo ""
+          
+          # Check provisioning profile data
+          echo "Provisioning profile data:"
+          security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/$PP_FILE_NAME
+          echo ""
+          
+          # Save ExportOptions.plist from Base64 to file
+          echo "Saving the base64 encoded ExportOptions.plist to $EXPORT_OPTS_PATH"
+          echo -n "$EXPORT_OPTIONS_PLIST" | base64 --decode -o $EXPORT_OPTS_PATH
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app
+          xcodebuild -version
+
+      - name: Check Xcode build settings
+        run: |
+          echo "Listing all the build settings for the project:"
+          cd ios && xcodebuild -showBuildSettings
+
+      - name: Check Xcode project Runner build settings
+        run: |
+          echo "Listing all the build settings for the Runner scheme:"
+          cd ios && xcodebuild -workspace Runner.xcworkspace -scheme Runner -showBuildSettings
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          architecture: x64
+
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      - name: Build the app
+        run: flutter build ios --debug --verbose --simulator --no-codesign
+
+      - name: Check for built app
+        run: |
+          echo "Checking for app build artifacts..."
+          echo "build/"
+          ls -la build
+          echo ""
+          
+          echo "build/ios/"
+          ls -la build/ios
+          echo ""
+          
+          echo "build/ios/Debug-iphonesimulator/"
+          ls -la build/ios/Debug-iphonesimulator
+          echo ""
+          
+          echo "build/ios/iphonesimulator/"
+          ls -la build/ios/iphonesimulator
+          echo ""
+
+#      - name: Build iOS App
+#        run: flutter build ipa --debug --verbose --export-options-plist=$EXPORT_OPTS_PATH
+#
+#      - name: Install iOS App
+#        run: flutter install ipa
+
+      - name: Create and Boot iOS Simulator
+        run: |
+          # List available devices and runtimes
+          xcrun simctl list devices
+          xcrun simctl list runtimes
+          
+          # Create a new simulator (if needed)
+          SIMULATOR_ID=$(xcrun simctl create "GitHubActions-Simulator" "iPhone 14" "com.apple.CoreSimulator.SimRuntime.iOS-17-0")
+          
+          # Boot the simulator
+          xcrun simctl boot "$SIMULATOR_ID"
+          xcrun simctl list devices booted
+
+      # Install the app using xcrun. Apparently, there's no Flutter command to
+      # install an unsigned iOS app. The "flutter install" command only works if
+      # the app is signed.
+      - name: Install the app
+        run: xcrun simctl install booted build/ios/iphonesimulator/Runner.app
+
+      - name: Ensure simulator is booted
+        run: xcrun simctl bootstatus booted
+
+      - name: Check the simulator UI
+        run: xcrun simctl ui booted appearance
+
+      - name: Take a screenshot of the simulator
+        run: |
+          mkdir -p ~/simulator-screenshots
+          xcrun simctl io booted screenshot ~/simulator-screenshots/screenshot.png
+
+      - name: Upload simulator screenshot as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: simulator-screenshot
+          path: ~/simulator-screenshots/screenshot.png
+
+      - name: Check for installed app on simulator
+        run: |
+          echo "Checking for app's container on the booted simulator:"
+          xcrun simctl get_app_container booted com.flutterbountyhunters.deeplinks.example
+
+#      - name: Kill any simctl processes
+#        run: pkill -f runner
+#
+#      - name: Check for other processes using the simulator
+#        run: ps aux | grep simctl
+
+      #      - name: Launch the app on the simulator just to prove we can
+#        run: |
+#          echo "Launching the installed app to prove that we can..."
+#          xcrun simctl launch booted com.flutterbountyhunters.deeplinks.example
+
+      - name: Run the iOS deep link tests
+        run: flutter test test_driver/deep_link_ios_test.dart

@@ -1,0 +1,25 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": [
+          "2X9AB296W2.com.flutterbountyhunters.deeplinks.example"
+        ],
+        "paths": [
+          "*"
+        ],
+        "components": [
+          {
+            "/": "/*"
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "2X9AB296W2.com.flutterbountyhunters.deeplinks.example"
+    ]
+  }
+}

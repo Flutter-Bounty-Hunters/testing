@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "flutter-bounty-hunters"
+  },
+  "targets": {
+    "flutter-bounty-hunters": {
+      "hosting": {
+        "deeplinks-flutter-bounty-hunters": [
+          "deeplinks-flutter-bounty-hunters"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
