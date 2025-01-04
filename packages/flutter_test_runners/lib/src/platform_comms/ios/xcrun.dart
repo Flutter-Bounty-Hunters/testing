@@ -40,7 +40,7 @@ class Xcrun {
     }
 
     final isAppRunning = output.contains(appBundleId);
-    print("Is app running? $isAppRunning");
+    print("Is app running? $isAppRunning - searched ${output.split("\n").length} running processes");
     return isAppRunning;
 
     // print("Trying command through shell with '| grep'...");
