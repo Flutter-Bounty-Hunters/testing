@@ -49,40 +49,42 @@ void testDeepLinkIosAppLaunch(
     expect(await Xcrun.isAppRunning(appBundleId), isFalse);
     _log.info("We've verified the app isn't running");
 
-    // Clear previous logcat messages so we don't try to connect to a previous
-    // Dart VM service listing.
-    _log.info("Clearing old logs");
-    await Xcrun.clearLogs();
-    _log.info("We've cleared old logs");
+    // FIXME: At the moment GitHub CI is saying this operation isn't permitted.
+    // // Clear previous logcat messages so we don't try to connect to a previous
+    // // Dart VM service listing.
+    // _log.info("Clearing old logs");
+    // await Xcrun.clearLogs();
+    // _log.info("We've cleared old logs");
+    print("NOT clearing logs because GitHub CI says not permitted");
 
-    // // Listen to iOS logs to find the Dart VM service for the running app.
-    // _log.info("Registering for simulator logs");
-    // String? dartVmService;
-    // await Xcrun.listenToXcrunForFlutterLogs(
-    //   appBundleId,
-    //   onLog: (log) {
-    //     // _log.info(log);
-    //     if (log.contains("Dart VM service")) {
-    //       _log.info("Found Dart VM log:\n$log");
-    //
-    //       final regex = RegExp(r'.*Dart VM service.*(http[s]?://[^\s]+)');
-    //       final httpUrl = Uri.parse(regex.firstMatch(log)!.group(1)!);
-    //
-    //       dartVmService =
-    //           Uri(scheme: "ws", host: httpUrl.host, port: httpUrl.port, path: "${httpUrl.path}ws").toString();
-    //     }
-    //   },
-    //   onError: (error) {
-    //     _log.shout("iOS ERROR:");
-    //     _log.shout(error);
-    //   },
-    // );
-    // _log.info("We're now listening to logs and errors from iOS");
-    //
-    // // Send the deep link.
-    // _log.info("Sending the deep link: $deepLink");
-    // await Xcrun.launchAppWithUniversalLink(universalLink: deepLink);
-    //
+    // Listen to iOS logs to find the Dart VM service for the running app.
+    _log.info("Registering for simulator logs");
+    String? dartVmService;
+    await Xcrun.listenToXcrunForFlutterLogs(
+      appBundleId,
+      onLog: (log) {
+        // _log.info(log);
+        if (log.contains("Dart VM service")) {
+          _log.info("Found Dart VM log:\n$log");
+
+          final regex = RegExp(r'.*Dart VM service.*(http[s]?://[^\s]+)');
+          final httpUrl = Uri.parse(regex.firstMatch(log)!.group(1)!);
+
+          dartVmService =
+              Uri(scheme: "ws", host: httpUrl.host, port: httpUrl.port, path: "${httpUrl.path}ws").toString();
+        }
+      },
+      onError: (error) {
+        _log.shout("iOS ERROR:");
+        _log.shout(error);
+      },
+    );
+    _log.info("We're now listening to logs and errors from iOS");
+
+    // Send the deep link.
+    _log.info("Sending the deep link: $deepLink");
+    await Xcrun.launchAppWithUniversalLink(universalLink: deepLink);
+
     // // Wait until the deep link launches the app.
     // _log.info("Waiting for app to launch: $appBundleId");
     // final isAppRunning = await Xcrun.waitForAppToLaunch(appBundleId);
