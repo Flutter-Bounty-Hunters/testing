@@ -108,7 +108,7 @@ class Xcrun {
     // command as a single string. If the command is passed as
     // individual arguments, it doesn't work. If the command is
     // run without "sh" and `runInShell` is `true`, it won't work.
-    return _runInShell(["xcrun simctl openurl booted \"$universalLink\""]);
+    return _runInShell(["sudo xcrun simctl openurl booted \"$universalLink\""]);
     // return Process.run(
     //   "sh",
     //   ["-c", "xcrun simctl openurl booted \"$universalLink\""],
