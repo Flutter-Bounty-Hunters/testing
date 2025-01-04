@@ -184,9 +184,15 @@ class Xcrun {
   }
 
   static Future<ProcessResult> _runInShell(List<String> commandAndArgs) async {
-    print("Sending shell command: '${commandAndArgs.join(" ")}'");
-    final result = await Process.run("sh", ["--verbose", "--debug", "-c", ...commandAndArgs]);
+    final command = commandAndArgs.join(" ");
+    print("Sending shell command: '$command'");
+    final result = await Process.run("sh", ["--verbose", "--debug", "-c", command]);
     print("Shell command exit code: ${result.exitCode}");
+
+    if (result.exitCode != 0) {
+      throw Exception("Failed to execute command in a shell:\n'$command'\nExit code: ${result.exitCode}");
+    }
+
     return result;
 
     // return Process.run(
