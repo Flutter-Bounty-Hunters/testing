@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_test/flutter_test.dart';
+
 /// A Dart interface for common `xcrun` commands.
 class Xcrun {
   /// Returns `true` if the app with the given [appBundleId] ID is currently
@@ -29,14 +31,17 @@ class Xcrun {
       "xcrun simctl spawn booted launchctl list",
     ]);
     print("Done with command without grep:");
-    print(result.stdout);
+    // print(result.stdout);
     final output = result.stdout;
     if (output is! String) {
       // We don't know how to handle this.
+      print("Received shell output that isn't a String. Don't know what to do with this.");
       return false;
     }
 
-    return output.contains(appBundleId);
+    final isAppRunning = output.contains(appBundleId);
+    print("Is app running? $isAppRunning");
+    return isAppRunning;
 
     // print("Trying command through shell with '| grep'...");
     // result = await _runInShell([
