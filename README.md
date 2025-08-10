@@ -1,6 +1,12 @@
 # Flutter Test Runners
 Widget test runners for Flutter apps and packages.
 
+<p align="center">
+  <a href="https://flutterbountyhunters.com" target="_blank">
+    <img src="https://github.com/Flutter-Bounty-Hunters/flutter_test_robots/assets/7259036/1b19720d-3dad-4ade-ac76-74313b67a898" alt="Built by the Flutter Bounty Hunters">
+  </a>
+</p>
+
 Write tests that run on a specified platform.
 
 ```dart
