@@ -96,6 +96,7 @@ void testWidgetsOnMac(
       await test(tester);
     } finally {
       debugDefaultTargetPlatformOverride = null;
+      tester.view.reset();
     }
   }, skip: skip, variant: variant);
 }
@@ -144,6 +145,7 @@ void testWidgetsOnWindows(
       await test(tester);
     } finally {
       debugDefaultTargetPlatformOverride = null;
+      tester.view.reset();
     }
   }, skip: skip, variant: variant);
 }
@@ -192,6 +194,7 @@ void testWidgetsOnLinux(
       await test(tester);
     } finally {
       debugDefaultTargetPlatformOverride = null;
+      tester.view.reset();
     }
   }, skip: skip, variant: variant);
 }

@@ -1,0 +1,37 @@
+name: Analyze & Test
+on: [pull_request, workflow_dispatch]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the PR branch
+      - uses: actions/checkout@v3
+
+      # Setup Flutter environment
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      # Download all the packages that the app uses
+      - run: flutter pub get
+
+      # Enforce lint rules
+      - run: flutter analyze
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the PR branch
+      - uses: actions/checkout@v3
+
+      # Setup Flutter environment
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      # Download all the packages that the app uses
+      - run: flutter pub get
+
+      # Run all tests
+      - run: flutter test
