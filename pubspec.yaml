@@ -1,8 +1,20 @@
-name: flutter_testing
+name: flutter_test_runners
+description: "Widget test runners for Flutter apps and packages."
+version: 0.1.0
+repository: https://github.com/Flutter-Bounty-Hunters/testing/tree/main/packages/flutter_test_runners
 
 environment:
-  sdk: '>=3.2.0-122.0.dev <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=1.17.0"
 
 dependencies:
-  melos: ^3.1.1
+  flutter:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+  meta: ^1.9.1
 
+dev_dependencies:
+  flutter_lints: ^2.0.0
+
+flutter:
