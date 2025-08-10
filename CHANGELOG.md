@@ -1,3 +1,7 @@
+## 0.1.1
+### Aug 10, 2025
+Updating package metadata after changing from mono-repo to single-project repo.
+
 ## 0.1.0
 ### Aug 9, 2025
 Added test name suffixes that name the simulated platform, e.g., "My test (on iOS)".
